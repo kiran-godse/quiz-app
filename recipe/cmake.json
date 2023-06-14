@@ -1,35 +1,29 @@
 {
-    "package": {
-        "kind": "image",
-        "name": "cmake",
-        "registry": "github",
-        "platforms": [
-            "arm64",
-            "amd64"
-        ]
-    },
-    "substrate": {
-        "registry": "github",
-        "name": "rainfall-one/crucible",
-        "tag": "latest",
-        "needs_auth": true
-    },
-    "source": {
-        "registry": "github",
-        "name": "Kitware/CMake",
-        "kind": "code",
-        "version": {
-            "kind": "tag",
-            "value": "latest"
-        },
-        "needs_auth": false
-    },
-    "actions": [
-        "cd CMake",
-        "./bootstrap --parallel=${N_CORES} ",
-        "make -j ${N_CORES}",
-        "make install",
-        "cd ..",
-        "rm -rf CMake"
-    ]
+  "name": "github-action-json-file-properties",
+  "version": "1.0.4",
+  "author": "zoexx",
+  "description": "GitHub Action to load properties from a JSON file.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node16 --outfile=dist/index.js",
+    "text": "act"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoexx/github-action-json-file-properties"
+  },
+  "keywords": [
+    "actions",
+    "typescript",
+    "GitHub"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.5",
+    "esbuild": "^0.12.16",
+    "typescript": "^4.3.5"
+  }
 }
