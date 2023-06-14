@@ -25,30 +25,29 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
     
-  params:
-      runs-on: ubuntu-latest
-      needs: build 
-      defaults:
-        run:
-          shell: bash
+
+  read-json-file:
+    runs-on: ubuntu-latest
     
-      outputs:
-        package.name:                   ${{ steps.inputs.outputs.package.name }}
-        crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
-        base-registry:                  ${{ steps.inputs.outputs.base_registry }}
-        base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
-        base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
-
-      steps:
-        - name: Checkout Codebase
-          uses: actions/checkout@v3
-
-        - name: Get Inputs
-          id:   inputs
-          uses: zoexx/github-action-json-file-properties@release
-          with:
-            file_path: "./recipe/cmake.json"
-
-        - name: Echo Inputs
-          run: |
-            echo ${{steps.inputs.outputs.package.name}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Install jq
+        run: sudo apt-get install -y jq
+      
+      - name: Read JSON file
+        id: read-json
+        run: |
+          file_contents=$(cat ./recipe/cmake.json)
+          echo "::set-output name=json::$file_contents"
+      
+      - name: Extract package name from JSON
+        id: extract-package-name
+        run: |
+          package_name=$(echo ${{ steps.read-json.outputs.json }} | jq -r '.package.name')
+          echo "::set-output name=package-name::$package_name"
+      
+      - name: Use package name
+        run: |
+          echo "Package name: ${{ steps.extract-package-name.outputs.package-name }}"
