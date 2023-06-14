@@ -52,4 +52,4 @@ jobs:
 
       - name: Echo Inputs
         run: |
-          echo ${{steps.inputs.outputs.package.name.value}}
+          echo ${{steps.json_properties.outputs.name}}}
