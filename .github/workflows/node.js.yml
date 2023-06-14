@@ -33,7 +33,7 @@ jobs:
           shell: bash
     
       outputs:
-        src-repo:                       ${{ steps.inputs.outputs.src_repo }}
+        package.name:                   ${{ steps.inputs.outputs.package.name }}
         crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
         base-registry:                  ${{ steps.inputs.outputs.base_registry }}
         base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
@@ -51,4 +51,4 @@ jobs:
 
         - name: Echo Inputs
           run: |
-            echo ${{steps.inputs.outputs.src_repo}}
+            echo ${{steps.inputs.outputs.package.name}}
