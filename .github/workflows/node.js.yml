@@ -51,4 +51,4 @@ jobs:
 
       - name: Echo Inputs
         run: |
-          echo ${{steps.inputs.outputs}}
+          echo ${{steps.inputs.outputs.package.name}}
