@@ -47,7 +47,7 @@ jobs:
           id:   inputs
           uses: zoexx/github-action-json-file-properties@release
           with:
-            file_path: "./racipe/cmake.json"
+            file_path: "./recipe/cmake.json"
 
         - name: Echo Inputs
           run: |
