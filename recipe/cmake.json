@@ -12,7 +12,7 @@
     "registry": "github",
     "name": "rainfall-one/crucible",
     "tag": "latest",
-    "needs_auth": true
+    "needs_auth": "true"
   },
   "source": {
     "registry": "github",
@@ -22,7 +22,7 @@
       "kind": "tag",
       "value": "latest"
     },
-    "needs_auth": false
+    "needs_auth": "false"
   },
   "actions": [
     "cd CMake",
