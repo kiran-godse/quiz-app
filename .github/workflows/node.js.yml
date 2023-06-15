@@ -56,8 +56,8 @@ jobs:
                   echo "{package_kind}={$package_kind}" >> $GITHUB_OUTPUT
                   
                   
-        - name: Get Inputs
+        - name: Test Inputs
           id:   test
           run: |
-                echo ${{ steps.inputs.outputs.package.name }}
+                echo ${{ steps.inputs.outputs.package.neme }}
                      
