@@ -51,8 +51,8 @@ jobs:
           id:   inputs
           run: |
                   package_name=$( cat ./recipe/cmake.json | jq -r '.package.name' )
-                  echo $package_name
+                  echo "::set-output name=package_kind::$package_name"
                   package_kind=$( cat ./recipe/cmake.json | jq -r '.package.kind' )
-                  echo $package_kind
+                  echo "::set-output name=package_kind::$package_kind"
             
                      
