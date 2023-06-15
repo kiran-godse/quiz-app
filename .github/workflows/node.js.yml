@@ -51,13 +51,13 @@ jobs:
           id:   inputs
           run: |
                   package_name=$( cat ./recipe/cmake.json | jq -r '.package.name' )
-                  echo $package_name
+                  echo "package_name=$package_name" >> $GITHUB_ENV
                   package_kind=$( cat ./recipe/cmake.json | jq -r '.package.kind' )
                   echo $package_kind
                   
                   
-#         - name: Test Inputs
-#           id:   test
-#           run: |
-#                 echo $package_neme
+        - name: Test Inputs
+          id:   test
+          run: |
+                  echo "The output is: ${{ steps.inputs.outputs.package_name }}"
                      
