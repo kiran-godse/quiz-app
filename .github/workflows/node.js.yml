@@ -50,7 +50,8 @@ jobs:
         - name: Get Inputs
           id:   inputs
           run: |
-              package_kind=$( cat ./recipe/cmake.json | jq -r '.package.kind' )
+              package_name=$( cat ./recipe/cmake.json | jq -r '.package.name' )
+              echo $package_name
 #             package_name=$( cat ./recipe/cmake.json | jq -r '.package.kind' )
-#             substrate_name=$( cat ./recipe/cmake.json | jq -r '.package.kind' )
+            
                      
