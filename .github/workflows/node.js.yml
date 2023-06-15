@@ -51,8 +51,8 @@ jobs:
           id:   inputs
           run: |
                   package_name=$( cat ./recipe/cmake.json | jq -r '.package.name' )
-                  echo "package_name=$package_name" >> $GITHUB_OUTPUT
                   package_kind=$( cat ./recipe/cmake.json | jq -r '.package.kind' )
+                  echo "package_name=$package_name" >> $GITHUB_OUTPUT
                   echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                   
                   
