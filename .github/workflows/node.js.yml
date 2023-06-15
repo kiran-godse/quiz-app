@@ -26,57 +26,57 @@ jobs:
 #     - run: npm test
     
 
-#   params:
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         shell: bash
+  params:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     
-#     outputs:
-#       package_name:                   ${{ steps.inputs.outputs.package.name }}
-#       crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
-#       base-registry:                  ${{ steps.inputs.outputs.base_registry }}
-#       base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
-#       base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
+    outputs:
+      package_name:                   ${{ steps.inputs.outputs.package.name }}
+      crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
+      base-registry:                  ${{ steps.inputs.outputs.base_registry }}
+      base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
+      base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
     
-#     steps:
-#       - name: Checkout Codebase
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
 
-#       - name: Get Inputs
-#         id:   inputs
-#         uses: zoexx/github-action-json-file-properties@release
-#         with:
-#           file_path: "./recipe/cmake.json"
+      - name: Get Inputs
+        id:   inputs
+        uses: zoexx/github-action-json-file-properties@release
+        with:
+          file_path: "./recipe/cmake.json"
 #           prop_path: "package.name"
 
-#       - name: Echo Inputs
-#         run: |
-#           echo ${{steps.inputs.outputs.value}}
+      - name: Echo Inputs
+        run: |
+          echo ${{steps.inputs.outputs.value}}
           
-  read-json-file:
-      runs-on: ubuntu-latest
+#   read-json-file:
+#       runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
+#       steps:
+#         - name: Checkout repository
+#           uses: actions/checkout@v2
 
-        - name: Install jq
-          run: sudo apt-get install -y jq
+#         - name: Install jq
+#           run: sudo apt-get install -y jq
 
-        - name: Read JSON file
-          id: read-json
-          run: |
-            file_contents=$(cat ./recipe/cmake.json)
-            echo "::set-output name=json::$file_contents"
+#         - name: Read JSON file
+#           id: read-json
+#           run: |
+#             file_contents=$(cat ./recipe/cmake.json)
+#             echo "::set-output name=json::$file_contents"
 
-        - name: Extract values from JSON
-          run: |
-            package_kind=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.kind')
-            package_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.name')
-            substrate_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.substrate.name')
+#         - name: Extract values from JSON
+#           run: |
+#             package_kind=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.kind')
+#             package_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.name')
+#             substrate_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.substrate.name')
 
-            echo "Package kind: $package_kind"
-            echo "Package name: $package_name"
-            echo "Substrate name: $substrate_name"
+#             echo "Package kind: $package_kind"
+#             echo "Package name: $package_name"
+#             echo "Substrate name: $substrate_name"
           
