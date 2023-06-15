@@ -45,7 +45,7 @@ jobs:
 
       - name: Get Inputs
         id:   inputs
-        uses: zoexx/github-action-json-file-properties@1.0.0
+        uses: zoexx/github-action-json-file-properties@release
         with:
           file_path: "./recipe/cmake.json"
           prop_path: "package.name"
