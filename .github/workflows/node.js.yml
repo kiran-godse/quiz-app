@@ -72,11 +72,11 @@ jobs:
 
         - name: Extract values from JSON
           run: |
-            package_kind=$(echo "${{ steps.read-json.outputs.json }}")
+            package_kind= ${{ steps.read-json.outputs.json }}
 #             package_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.name')
 #             substrate_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.substrate.name')
 
-#             echo "Package kind: $package_kind"
+              echo "Package kind: $package_kind"
 #             echo "Package name: $package_name"
 #             echo "Substrate name: $substrate_name"
           
