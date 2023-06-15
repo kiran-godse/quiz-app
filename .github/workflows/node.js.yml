@@ -61,19 +61,18 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v2
 
-        - name: Install jq
-          run: sudo apt-get install -y jq
+#         - name: Install jq
+#           run: sudo apt-get install -y jq
 
-        - name: Read JSON file
-          id: read-json
-          run: |
-            file_contents=$(cat ./recipe/cmake.json)
-            echo "::set-output name=json::$file_contents"
+#         - name: Read JSON file
+#           id: read-json
+#           run: |
+#             file_contents=$(cat ./recipe/cmake.json)
+#             echo "::set-output name=json::$file_contents"
 
         - name: Extract values from JSON
           run: |
-              package_name=$( cat ./recipe/cmake.json | jq -r '.package.name' )
-              echo $package_name
+              package_name=$( cat $input | jq -r '.package.name' )
 #             package_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.name')
 #             substrate_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.substrate.name')
           
