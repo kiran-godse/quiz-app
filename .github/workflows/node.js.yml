@@ -70,9 +70,9 @@ jobs:
             file_contents=$(cat ./recipe/cmake.json)
             echo "::set-output name=json::$file_contents"
 
-#         - name: Extract values from JSON
-#           run: |
-#             package_kind=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.kind')
+        - name: Extract values from JSON
+          run: |
+            package_kind=$(echo "${{ steps.read-json.outputs.json }}")
 #             package_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.name')
 #             substrate_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.substrate.name')
 
