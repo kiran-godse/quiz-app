@@ -72,7 +72,7 @@ jobs:
 
         - name: Extract values from JSON
           run: |
-              echo ${{ steps.read-json.outputs.json }}
+              cat ./recipe/cmake.json | jq -r '.package.name'
 #             package_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.package.name')
 #             substrate_name=$(echo "${{ steps.read-json.outputs.json }}" | jq -r '.substrate.name')
           
