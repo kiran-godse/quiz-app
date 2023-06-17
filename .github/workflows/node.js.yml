@@ -33,7 +33,7 @@ jobs:
 
       - name: Echo Inputs
         run: |
-          echo ${{steps.inputs.outputs.package}}
+          echo ${{steps.inputs.outputs.package.name}}
           
 #   get_inputs:
 #       runs-on: ubuntu-latest
