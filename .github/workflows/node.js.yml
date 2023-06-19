@@ -8,33 +8,33 @@ on:
 
 jobs:
 
-  params:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+#   params:
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash
     
-    outputs:
-      package_name:                   ${{ steps.inputs.outputs.package.name }}
-      crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
-      base-registry:                  ${{ steps.inputs.outputs.base_registry }}
-      base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
-      base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
+#     outputs:
+#       package_name:                   ${{ steps.inputs.outputs.package.name }}
+#       crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
+#       base-registry:                  ${{ steps.inputs.outputs.base_registry }}
+#       base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
+#       base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
     
-    steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout Codebase
+#         uses: actions/checkout@v3
 
-      - name: Get Inputs
-        id:   inputs
-        uses: zoexx/github-action-json-file-properties@release
-        with:
-          file_path: "./recipe/cmake.json"
-#           prop_path: "package.name"
+#       - name: Get Inputs
+#         id:   inputs
+#         uses: zoexx/github-action-json-file-properties@release
+#         with:
+#           file_path: "./recipe/cmake.json"
+# #           prop_path: "package.name"
 
-      - name: Echo Inputs
-        run: |
-          echo ${{steps.inputs.outputs.package.name}}
+#       - name: Echo Inputs
+#         run: |
+#           echo ${{steps.inputs.outputs.package.name}}
           
   get_inputs:
       runs-on: ubuntu-latest
@@ -74,7 +74,7 @@ jobs:
           run: |
             echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
             echo $PACKAGE_JSON
-            echo "${{ fromJson(env.PACKAGE_JSON).version }}"
+            
 
 
 
