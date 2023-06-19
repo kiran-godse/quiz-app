@@ -70,12 +70,12 @@ jobs:
 #                 echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
 #                 echo '${{ fromJson(env.PACKAGE_JSON).version }}'
                
-        - name: Get Inputs test
-          id: inputs12
-          run: |
-            echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
-            echo $PACKAGE_JSON
-            echo "${{ fromJson(env.PACKAGE_JSON).version }}"
+          - name: Get Inputs 
+            id: inputs12
+            run: |
+              echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
+              echo $PACKAGE_JSON
+              echo "${{ fromJson(env.PACKAGE_JSON).version }}"
 
 
 
