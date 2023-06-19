@@ -67,8 +67,8 @@ jobs:
         - name: Get Inputs test
           id:   inputs1
           run: |
-                  echo "PACKAGE_JSON=$(jq -c . < ./recipe/cmake.json)" >> $GITHUB_ENV
-                  echo '${{ fromJson(env.PACKAGE_JSON).package.name }}'
+                echo "PACKAGE_JSON=$(jq -c . < ./recipe/cmake.json)" >> $GITHUB_ENV
+                echo "${{ fromJson(env.PACKAGE_JSON).package.name }}"
 
                
                   
