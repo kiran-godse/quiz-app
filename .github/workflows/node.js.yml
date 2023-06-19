@@ -8,33 +8,33 @@ on:
 
 jobs:
 
-#   params:
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         shell: bash
+  params:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     
-#     outputs:
-#       package_name:                   ${{ steps.inputs.outputs.package.name }}
-#       crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
-#       base-registry:                  ${{ steps.inputs.outputs.base_registry }}
-#       base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
-#       base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
+    outputs:
+      package_name:                   ${{ steps.inputs.outputs.package.name }}
+      crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
+      base-registry:                  ${{ steps.inputs.outputs.base_registry }}
+      base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
+      base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
     
-#     steps:
-#       - name: Checkout Codebase
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
 
-#       - name: Get Inputs
-#         id:   inputs
-#         uses: zoexx/github-action-json-file-properties@release
-#         with:
-#           file_path: "./recipe/cmake.json"
-# #           prop_path: "package.name"
+      - name: Get Inputs
+        id:   inputs
+        uses: zoexx/github-action-json-file-properties@release
+        with:
+          file_path: "./recipe/cmake.json"
+#           prop_path: "package.name"
 
-#       - name: Echo Inputs
-#         run: |
-#           echo ${{steps.inputs.outputs.package.name}}
+      - name: Echo Inputs
+        run: |
+          echo ${{steps.inputs.outputs.package.name}}
           
   get_inputs:
       runs-on: ubuntu-latest
@@ -46,36 +46,35 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v2
       
-#             echo "::set-output name=json::$file_contents"
 
-#         - name: Get Inputs
-#           id:   inputs
-#           run: |
-#                   package_name=$( cat ${{vars.INPUT_PATH}} | jq -r '.package.name' )
-#                   package_kind=$( cat ${{vars.INPUT}} | jq -r '.package.kind' )
-#                   echo "package_name=$package_name" >> $GITHUB_OUTPUT
-#                   echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
+        # - name: Get Inputs
+        #   id:   inputs
+        #   run: |
+        #           package_name=$( cat ${{vars.INPUT_PATH}} | jq -r '.package.name' )
+        #           package_kind=$( cat ${{vars.INPUT}} | jq -r '.package.kind' )
+        #           echo "package_name=$package_name" >> $GITHUB_OUTPUT
+        #           echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                   
                   
-#         - name: Test Inputs
-#           id:   test
-#           run: |
-#                   echo "${{ steps.inputs.outputs.package_name }}"
-#                   echo "${{ steps.inputs.outputs.package_kind }}"
+        # - name: Test Inputs
+        #   id:   test
+        #   run: |
+        #           echo "${{ steps.inputs.outputs.package_name }}"
+        #           echo "${{ steps.inputs.outputs.package_kind }}"
                      
                      
-#         - name: Get Inputs test
-#           id:   inputs1
-#           run: |
-#                 echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
-#                 echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+        # - name: Get Inputs test
+        #   id:   inputs1
+        #   run: |
+        #         echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
+        #         echo '${{ fromJson(env.PACKAGE_JSON).version }}'
                
-          - name: Get Inputs 
-            id: inputs12
-            run: |
-              echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
-              echo $PACKAGE_JSON
-              echo "${{ fromJson(env.PACKAGE_JSON).version }}"
+        - name: Get Inputs 
+          id: inputs12
+          run: |
+            echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
+            echo $PACKAGE_JSON
+            echo "${{ fromJson(env.PACKAGE_JSON).version }}"
 
 
 
