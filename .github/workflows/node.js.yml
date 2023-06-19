@@ -72,7 +72,7 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-            echo "contents= $(cat recipe/recipe.json)" 
+            echo "contents= $(cat recipe/cmake.json)" 
             echo "package_prop=$contents" >> $GITHUB_OUTPUT
             
         - name: Read recipe.json
