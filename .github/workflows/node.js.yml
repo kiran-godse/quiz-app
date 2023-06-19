@@ -48,18 +48,34 @@ jobs:
       
 #             echo "::set-output name=json::$file_contents"
 
-        - name: Get Inputs
-          id:   inputs
-          run: |
-                  package_name=$( cat ${{vars.INPUT_PATH}} | jq -r '.package.name' )
-                  package_kind=$( cat ${{vars.INPUT}} | jq -r '.package.kind' )
-                  echo "package_name=$package_name" >> $GITHUB_OUTPUT
-                  echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
+#         - name: Get Inputs
+#           id:   inputs
+#           run: |
+#                   package_name=$( cat ${{vars.INPUT_PATH}} | jq -r '.package.name' )
+#                   package_kind=$( cat ${{vars.INPUT}} | jq -r '.package.kind' )
+#                   echo "package_name=$package_name" >> $GITHUB_OUTPUT
+#                   echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                   
                   
-        - name: Test Inputs
-          id:   test
+#         - name: Test Inputs
+#           id:   test
+#           run: |
+#                   echo "${{ steps.inputs.outputs.package_name }}"
+#                   echo "${{ steps.inputs.outputs.package_kind }}"
+                     
+                     
+        - name: Get Inputs test
+          id:   inputs1
           run: |
-                  echo "${{ steps.inputs.outputs.package_name }}"
-                  echo "${{ steps.inputs.outputs.package_kind }}"
+                  echo "PACKAGE_JSON=$(jq -c . < ./recipe/cmake.json)" >> $GITHUB_ENV
+                  echo '${{ fromJson(env.PACKAGE_JSON).package.name }}'
+
+               
+                  
+                  
+#         - name: Test Inputs1
+#           id:   test1
+#           run: |
+#                   echo "${{ steps.inputs.outputs.package_name }}"
+#                   echo "${{ steps.inputs.outputs.package_kind }}"
                      
