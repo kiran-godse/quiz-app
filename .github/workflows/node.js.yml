@@ -72,8 +72,13 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-            echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_OUTPUT
-            echo "output=$PACKAGE_JSON"
+            echo "contents= $(cat recipe/recipe.json)" 
+            echo "package_prop=$contents" >> $GITHUB_OUTPUT
+            
+        - name: Read recipe.json
+          id: json
+          run: |
+            package_name=$(echo "${{ steps.inputs1.outputs.package_prop }}"| jq -r '.package.name')
             
 
 
