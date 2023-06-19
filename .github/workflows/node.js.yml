@@ -78,7 +78,8 @@ jobs:
         - name: Read recipe.json
           id: json
           run: |
-            package_name= echo "${{ steps.inputs12.outputs.package_prop }}"
+            package_name= "$({{ steps.inputs12.outputs.package_prop }}"| jq -r '.package.name')
+            echo "package_name"
             
 
 
