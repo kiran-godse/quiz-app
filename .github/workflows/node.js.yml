@@ -67,7 +67,7 @@ jobs:
         - name: Get Inputs test
           id:   inputs1
           run: |
-                echo "PACKAGE_JSON=$(jq -c . < ./src/package.json)" >> $GITHUB_ENV
+                echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
                
 
 
