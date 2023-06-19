@@ -68,6 +68,7 @@ jobs:
           id:   inputs1
           run: |
                 echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
+                package_name=${{env.PACKAGE_JSON}} | jq -r '.package.name' )
                
 
 
