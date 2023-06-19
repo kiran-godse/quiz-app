@@ -51,7 +51,7 @@ jobs:
         - name: Get Inputs
           id:   inputs
           run: |
-                  package_name=$( cat ${{vars.INPUT}} | jq -r '.package.name' )
+                  package_name=$( cat ${{vars.INPUT_PATH}} | jq -r '.package.name' )
                   package_kind=$( cat ${{vars.INPUT}} | jq -r '.package.kind' )
                   echo "package_name=$package_name" >> $GITHUB_OUTPUT
                   echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
