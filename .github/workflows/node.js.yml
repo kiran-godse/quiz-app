@@ -79,13 +79,13 @@ jobs:
                 package_kind=${package_info[0]}
                 package_name=${package_info[1]}
                 package_registry=${package_info[2]}
-                package_platforms=${package_info[3]}
+               
 
 
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                echo "package_name=$package_name" >> $GITHUB_OUTPUT
                echo "package_registry=$package_registry" >> $GITHUB_OUTPUT
-               echo "package_platforms=$package_platforms" >> $GITHUB_OUTPUT
+               
                
         - name: Test Inputs
           id:   test
