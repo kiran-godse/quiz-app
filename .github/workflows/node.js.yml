@@ -67,15 +67,13 @@ jobs:
           id:   inputs1
           run: |
                 echo "JSON=$(jq -c . < ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
-                echo "${{env.JSON}}"
-              
-             
                 
-               
-        # - name: Get Inputs 
-        #   id: inputs12
-        #   run: |
-        #     echo "contents= $(cat recipe/cmake.json)" 
+                          
+                              
+        - name: Get Inputs 
+          id: inputs12
+          run: |
+            echo "${{env.JSON}}" 
         #     echo "package_prop=$contents" >> $GITHUB_OUTPUT
             
         # - name: Read recipe.json
