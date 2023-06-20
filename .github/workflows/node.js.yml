@@ -67,7 +67,7 @@ jobs:
           id:   inputs1
           run: |
                 echo "JSON=$(jq -c . < ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
-               
+                echo '${{ fromJson(env.JSON).package }}'
               
              
                 
