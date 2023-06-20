@@ -72,13 +72,21 @@ jobs:
                           
                               
         - name: Get Inputs 
-          id: inputs12
+          id: inputs
           run: |
-              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)"
-              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package)"
-              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)"
+               package_kind=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)"
+               package_name=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)"
+               package_registry=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)"
+               package_platforms=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)"
+               echo "package_name=$package_name" >> $GITHUB_OUTPUT
+               
+        - name: Test Inputs
+          id:   test
+          run: |
+                  echo "${{ steps.inputs.outputs.package_name }}"
+               
               
-  #            echo '${env.PACKAGE_JSON}'
+  #            echo '${env.PACKAGE_JSON}'platforms
  #             echo "$(jq -r .c . < test.json | jq .SLACK_API_KEY)"
  #             jq -r .c myfile.json | jq .
             
