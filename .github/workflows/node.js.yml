@@ -76,7 +76,8 @@ jobs:
           run: |
               echo "PACKAGE_JSON=$(jq -c . < test.json)" >> $GITHUB_ENV
               echo '${env.PACKAGE_JSON}'
-              echo '${{ fromJson(env.PACKAGE_JSON)}}'
+              echo "$(jq -r .c . < test.json | jq .SLACK_API_KEY)"
+ #             jq -r .c myfile.json | jq .
             
             
             
