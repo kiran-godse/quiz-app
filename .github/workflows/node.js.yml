@@ -66,7 +66,7 @@ jobs:
         - name: Get Inputs test
           id:   inputs1
           run: |
-                echo "JSON=$(jq -c . < ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
+                echo "JSON=$( cat ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
                 
                           
                               
@@ -74,10 +74,7 @@ jobs:
           id: inputs12
           run: |
             echo "${{env.JSON}}"
-            package_name= "${{env.JSON}}" 
-            package= $(echo $package_name | jq -r '.package.name')
-            echo $package_name
-            echo $package
+            
             
             
             echo "package_name=$package_name" >> $GITHUB_OUTPUT
