@@ -63,17 +63,19 @@ jobs:
         #           echo "${{ steps.inputs.outputs.package_kind }}"
                      
                      
-        - name: Get Inputs test
-          id:   inputs1
-          run: |
-                JSON= "$( cat ./recipe/cmake/recipe.json)" 
-                echo $JSON
+#         - name: Get Inputs test
+#           id:   inputs1
+#           run: |
+#                 JSON= "$( cat ./recipe/cmake/recipe.json)" 
+#                 echo $JSON
                 
                           
                               
-#         - name: Get Inputs 
-#           id: inputs12
-#           run: |
+        - name: Get Inputs 
+          id: inputs12
+          run: |
+              echo "PACKAGE_JSON=$(jq -c . < ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
+              echo '${{ fromJson(env.PACKAGE_JSON)}}'
             
             
             
