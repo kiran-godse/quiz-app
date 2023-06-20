@@ -77,9 +77,12 @@ jobs:
                package_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)
                package_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)
                package_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)
+               package_platforms=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)
+
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                echo "package_name=$package_name" >> $GITHUB_OUTPUT
                echo "package_registry=$package_registry" >> $GITHUB_OUTPUT
+               echo "package_platforms=$package_platforms" >> $GITHUB_OUTPUT
                
         - name: Test Inputs
           id:   test
@@ -87,6 +90,7 @@ jobs:
                   echo "${{ steps.inputs.outputs.package_kind }}"
                   echo "${{ steps.inputs.outputs.package_name }}"
                   echo "${{ steps.inputs.outputs.package_registry }}"
+                  echo "${{ steps.inputs.outputs.package_platforms }}"
                 
                
               
