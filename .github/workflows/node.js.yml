@@ -66,18 +66,19 @@ jobs:
         - name: Get Inputs test
           id:   inputs1
           run: |
-                echo "JSON='$( cat ./recipe/cmake/recipe.json)'" >> $GITHUB_ENV
+                JSON='$( cat ./recipe/cmake/recipe.json)' 
+                echo $JSON
                 
                           
                               
-        - name: Get Inputs 
-          id: inputs12
-          run: |
-            echo "${{env.JSON}}"
+#         - name: Get Inputs 
+#           id: inputs12
+#           run: |
             
             
             
-            echo "package_name=$package_name" >> $GITHUB_OUTPUT
+            
+#             echo "package_name=$package_name" >> $GITHUB_OUTPUT
             
             
             
