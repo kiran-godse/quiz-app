@@ -67,7 +67,8 @@ jobs:
           id:   inputs1
           run: |
                 echo "JSON=$(jq -c . < ./recipe/cmake/recipe.json)" 
-                echo "package_content=$json" >> $GITHUB_OUTPUT
+                echo package_name=$(json |jq -r '.package.name')
+              
              
                 
                
