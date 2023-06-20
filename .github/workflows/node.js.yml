@@ -74,10 +74,10 @@ jobs:
         - name: Get Inputs 
           id: inputs
           run: |
-               package_kind=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)"
-               package_name=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)"
-               package_registry=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)"
-               package_platforms=echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)"
+               package_kind = echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)"
+               package_name = echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)"
+               package_registry = echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)"
+               package_platforms = echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)"
                echo "package_name=$package_name" >> $GITHUB_OUTPUT
                
         - name: Test Inputs
