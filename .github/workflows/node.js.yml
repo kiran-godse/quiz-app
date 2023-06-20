@@ -76,8 +76,8 @@ jobs:
             echo "${{env.JSON}}"
             package_name= "${{env.JSON}}" 
             package= $(echo $package_name | jq -r '.package.name')
-            echo "package_name=$package_name"
-            echo "package=$package"
+            echo "package_name=${{package_name}}"
+            echo "package=${package}"
             
             
             echo "package_name=$package_name" >> $GITHUB_OUTPUT
