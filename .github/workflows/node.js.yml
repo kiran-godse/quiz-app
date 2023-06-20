@@ -93,7 +93,7 @@ jobs:
         id: read-json
         run: |
             JSON=$(cat ./recipe/cmake/recipe.json)
-            echo "content=$JSON" >> $GITHUB_ENV
+            echo "content=$JSON" >> GITHUB_OUTPUT
           
   job2:
     needs: job1
