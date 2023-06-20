@@ -74,10 +74,13 @@ jobs:
         - name: Get Inputs 
           id: inputs
           run: |
-               package_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)
-               package_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)
-               package_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)
-               package_platforms=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)
+              mapfile -t package_info < <(jq -c '[.package.kind, .package.name, .package.registry, .package.platforms] | @tsv' < ./recipe/cmake/recipe.json)
+
+                package_kind=${package_info[0]}
+                package_name=${package_info[1]}
+                package_registry=${package_info[2]}
+                package_platforms=${package_info[3]}
+
 
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                echo "package_name=$package_name" >> $GITHUB_OUTPUT
