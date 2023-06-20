@@ -67,6 +67,7 @@ jobs:
           id:   inputs1
           run: |
                 echo "PACKAGE_JSON=$(jq -c . < ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
+                echo "${{env.PACKAGE_JSON}}"
                 
                
         # - name: Get Inputs 
