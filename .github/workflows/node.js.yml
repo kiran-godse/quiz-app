@@ -94,12 +94,13 @@ jobs:
         run: |
             JSON=$(cat ./recipe/cmake/recipe.json)
             echo "content=$JSON" >> GITHUB_OUTPUT
+            echo "$content"
           
-  job2:
-    needs: job1
-    runs-on: ubuntu-latest
-    steps:
-    - run: echo "${{fromJson(needs.job1.outputs.package_name)}}"
+#   job2:
+#     needs: job1
+#     runs-on: ubuntu-latest
+#     steps:
+#     - run: echo "${{fromJson(needs.job1.outputs.package_name)}}"
             
 
 
