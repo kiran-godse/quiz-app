@@ -73,7 +73,8 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-            package_name=$(echo 'package_name=(echo "{"package":{"kind":"image","name":"cmake","registry":"github","platforms":["arm64","amd64"]},"substrate":{"registry":"github","name":"rainfall-one/crucible","tag":"latest","needs_auth":"true"},"source":{"registry":"github","name":"Kitware/CMake","kind":"code","version":{"kind":"tag","value":"latest"},"needs_auth":"false"},"actions":["cd CMake","make install","cd ..","rm  CMake"]}")' | jq -r '.package.name')
+            package_name=$(echo '{"package":{"kind":"image","name":"cmake","registry":"github","platforms":["arm64","amd64"]},"substrate":{"registry":"github","name":"rainfall-one/crucible","tag":"latest","needs_auth":"true"},"source":{"registry":"github","name":"Kitware/CMake","kind":"code","version":{"kind":"tag","value":"latest"},"needs_auth":"false"},"actions":["cd CMake","make install","cd ..","rm  CMake"]}' | jq -r '.package.name')
+            echo $package_name
             echo "package_name=$package_name" >> $GITHUB_OUTPUT
             
             
