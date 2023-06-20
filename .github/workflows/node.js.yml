@@ -74,7 +74,7 @@ jobs:
         - name: Get Inputs 
           id: inputs
           run: |
-               package_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)
+              #  package_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)
                package_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)
                package_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)
                package_platforms=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)
