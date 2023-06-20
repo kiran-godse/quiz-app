@@ -66,7 +66,7 @@ jobs:
         - name: Get Inputs test
           id:   inputs1
           run: |
-                echo "JSON=$( cat ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
+                echo "JSON='$( cat ./recipe/cmake/recipe.json)'" >> $GITHUB_ENV
                 
                           
                               
