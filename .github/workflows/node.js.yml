@@ -4,7 +4,7 @@ name: Node.js CI
 on:
   workflow_dispatch:
   push:
-    branches: [ master, development ]
+    branches: [ master ]
 
 jobs:
 
@@ -36,15 +36,15 @@ jobs:
 #         run: |
 #           echo ${{steps.inputs.outputs.package.name}}
           
-  get_inputs:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          shell: bash
+  # get_inputs:
+  #     runs-on: ubuntu-latest
+  #     defaults:
+  #       run:
+  #         shell: bash
 
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
+  #     steps:
+  #       - name: Checkout repository
+  #         uses: actions/checkout@v2
       
 
         # - name: Get Inputs
@@ -69,17 +69,37 @@ jobs:
         #         echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
         #         echo '${{ fromJson(env.PACKAGE_JSON).version }}'
                
-        - name: Get Inputs 
-          id: inputs12
-          run: |
-            echo "contents= $(cat recipe/cmake.json)" 
-            echo "package_prop=$contents" >> $GITHUB_OUTPUT
+        # - name: Get Inputs 
+        #   id: inputs12
+        #   run: |
+        #     echo "contents= $(cat recipe/cmake.json)" 
+        #     echo "package_prop=$contents" >> $GITHUB_OUTPUT
             
-        - name: Read recipe.json
-          id: json
-          run: |
-            package_name= "${{ steps.inputs12.outputs.package_prop }}"
-            echo "package_name"
+        # - name: Read recipe.json
+        #   id: json
+        #   run: |
+        #     package_name= "${{ steps.inputs12.outputs.package_prop }}"
+        #     echo "package_name"
+
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      package_name: ${{ steps.read-json.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: set-matrix
+        id: read-json
+        run: |
+            JSON=$(cat ./recipe/cmake/recipe.json)
+            echo "matrix=$JSON" >> $GITHUB_ENV
+          
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "${{fromJson(needs.job1.outputs.matrix)}}"
             
 
 
