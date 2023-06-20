@@ -67,7 +67,7 @@ jobs:
           id:   inputs1
           run: |
                 echo "JSON=$(jq -c . < ./recipe/cmake/recipe.json)" 
-                echo package_name=$(json |jq -r '.package.name')
+                echo package_name=($json |jq -r '.package.name')
               
              
                 
