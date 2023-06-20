@@ -73,14 +73,14 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-            package_name= echo "${{env.JSON}}" | jq -r '.package.name'
-            echo "package_name=$package_name" >> $GITHUB_OUTPUT
+            echo "${{env.JSON}}"
             
             
-        - name: Read recipe.json
-          id: json
-          run: |
-            echo "${{ steps.inputs12.outputs.package_name }}"
+            
+#         - name: Read recipe.json
+#           id: json
+#           run: |
+#             echo "${{ steps.inputs12.outputs.package_name }}"
         #     echo "package_name"
 
 #   job1:
