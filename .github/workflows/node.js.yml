@@ -74,7 +74,6 @@ jobs:
           id: inputs12
           run: |
             package_name=$(echo ${{env.JSON}}| jq -r '.package.name')
-            echo $package_name
             echo "package_name=$package_name" >> $GITHUB_OUTPUT
             
             
