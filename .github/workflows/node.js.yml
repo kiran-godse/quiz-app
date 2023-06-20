@@ -73,7 +73,7 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-            package_name=$(echo ${{env.JSON}}| jq -r '.package.name')
+            package_name=$(echo (${{env.JSON}}| jq -r '.package.name'))
             echo "package_name=$package_name" >> $GITHUB_OUTPUT
             
             
