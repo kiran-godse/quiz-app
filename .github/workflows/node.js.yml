@@ -74,9 +74,9 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq.package.name)"
-              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq.package)"
-              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq.package.kind)"
+              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)"
+              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package)"
+              echo "$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)"
               
   #            echo '${env.PACKAGE_JSON}'
  #             echo "$(jq -r .c . < test.json | jq .SLACK_API_KEY)"
