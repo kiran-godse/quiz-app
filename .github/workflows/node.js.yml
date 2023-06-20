@@ -74,8 +74,8 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-              echo "PACKAGE_JSON=$(jq -c . < ./recipe/cmake/recipe.json)" >> $GITHUB_ENV
-              echo '${{ fromJson(./recipe/cmake/recipe.json)}}'
+              echo "PACKAGE_JSON={\"SLACK_API_KEY\":\"itsasecret\"}" >> $GITHUB_ENV
+              echo '${{ fromJson(env.PACKAGE_JSON)}}'
             
             
             
