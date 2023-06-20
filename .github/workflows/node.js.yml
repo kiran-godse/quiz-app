@@ -84,11 +84,19 @@ jobs:
                package_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)
                package_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)
                package_platforms=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)
+               substrate_tag=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.tag)
+               substrate_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.name)
+               substrate_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.registry)
+               substrate_auth=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.needs_auth)
 
 
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                echo "package_name=$package_name" >> $GITHUB_OUTPUT
                echo "package_registry=$package_registry" >> $GITHUB_OUTPUT
+               echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
+               echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
+               echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
+               echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
                
                
         - name: Test Inputs
@@ -98,7 +106,11 @@ jobs:
                   echo "${{ steps.inputs.outputs.package_name }}"
                   echo "${{ steps.inputs.outputs.package_registry }}"
                   echo "${{ steps.inputs.outputs.package_platforms }}"
-                
+                  echo "${{ steps.inputs.outputs.substrate_tag }}"
+                  echo "${{ steps.inputs.outputs.substrate_name }}"
+                  echo "${{ steps.inputs.outputs.substrate_registry }}"
+                  echo "${{ steps.inputs.outputs.substrate_auth }}"
+
                
               
   #            echo '${env.PACKAGE_JSON}'platforms
