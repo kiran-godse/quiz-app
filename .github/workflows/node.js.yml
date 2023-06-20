@@ -74,7 +74,7 @@ jobs:
         - name: Get Inputs 
           id: inputs12
           run: |
-              echo "PACKAGE_JSON=$(jq -c . < test.json)" >> $GITHUB_ENV
+              echo "$(jq -c . < ./recipe/cmake/recipe.json) | jq.package.name" 
               echo '${env.PACKAGE_JSON}'
               echo "$(jq -r .c . < test.json | jq .SLACK_API_KEY)"
  #             jq -r .c myfile.json | jq .
