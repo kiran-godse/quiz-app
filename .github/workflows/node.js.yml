@@ -91,7 +91,7 @@ jobs:
                source_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .source.kind)
                source_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .ssource.name)
                source_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .source.registry)
-               source_version=$(jq -c . < ./recipe/cmake/recipe.json | jq .source.version.value
+               source_version=$(jq -c . < ./recipe/cmake/recipe.json | jq .source.version.value)
 
 
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
