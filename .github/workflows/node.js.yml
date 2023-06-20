@@ -94,7 +94,7 @@ jobs:
         run: |
             JSON=$(cat ./recipe/cmake/recipe.json)
             echo "content=$JSON" >> GITHUB_OUTPUT
-            echo "$content"
+            echo "$package_name"
           
 #   job2:
 #     needs: job1
