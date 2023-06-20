@@ -66,7 +66,7 @@ jobs:
         - name: Get Inputs test
           id:   inputs1
           run: |
-                JSON='$( cat ./recipe/cmake/recipe.json)' 
+                JSON= "$( cat ./recipe/cmake/recipe.json)" 
                 echo $JSON
                 
                           
