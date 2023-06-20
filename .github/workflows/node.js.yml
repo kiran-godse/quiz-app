@@ -74,12 +74,14 @@ jobs:
           id: inputs12
           run: |
             echo "${{env.JSON}}" 
-        #     echo "package_prop=$contents" >> $GITHUB_OUTPUT
+            package_name=$( ${{env.JSON}} | jq -r '.package.name' )
+            echo "package_name=$package_name" >> $GITHUB_OUTPUT
             
-        # - name: Read recipe.json
-        #   id: json
-        #   run: |
-        #     package_name= "${{ steps.inputs12.outputs.package_prop }}"
+            
+        - name: Read recipe.json
+          id: json
+          run: |
+            echo "${{ steps.inputs12.outputs.package_name }}"
         #     echo "package_name"
 
 #   job1:
