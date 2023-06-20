@@ -36,15 +36,15 @@ jobs:
 #         run: |
 #           echo ${{steps.inputs.outputs.package.name}}
           
-  # get_inputs:
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         shell: bash
+  get_inputs:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          shell: bash
 
-  #     steps:
-  #       - name: Checkout repository
-  #         uses: actions/checkout@v2
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
       
 
         # - name: Get Inputs
@@ -63,11 +63,11 @@ jobs:
         #           echo "${{ steps.inputs.outputs.package_kind }}"
                      
                      
-        # - name: Get Inputs test
-        #   id:   inputs1
-        #   run: |
-        #         echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
-        #         echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+        - name: Get Inputs test
+          id:   inputs1
+          run: |
+                echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
+                echo '${{ fromJson(env.PACKAGE_JSON).version }}'
                
         # - name: Get Inputs 
         #   id: inputs12
@@ -81,28 +81,28 @@ jobs:
         #     package_name= "${{ steps.inputs12.outputs.package_prop }}"
         #     echo "package_name"
 
-  job1:
-    runs-on: ubuntu-latest
-    outputs:
-      package_name: ${{ steps.read-json.outputs.content }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+#   job1:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       package_name: ${{ steps.read-json.outputs.content }}
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
         
-      - name: set-content
-        id: read-json
-        run: |
-            JSON=$(cat ./recipe/cmake/recipe.json)
-            echo "content=$JSON" >> GITHUB_OUTPUT
-            echo "$package_name"
+#       - name: set-content
+#         id: read-json
+#         run: |
+#             JSON=$(cat ./recipe/cmake/recipe.json)
+#             echo "content=$JSON" >> GITHUB_OUTPUT
+#             echo "$package_name"
           
-  job2:
-    needs: job1
-    runs-on: ubuntu-latest
-    steps:
-      - env:
-          package_name: ${{needs.job1.outputs.package_name}}
-        run: echo "$package_name"
+#   job2:
+#     needs: job1
+#     runs-on: ubuntu-latest
+#     steps:
+#       - env:
+#           package_name: ${{needs.job1.outputs.package_name}}
+#         run: echo "$package_name"
 
 
 
