@@ -73,11 +73,17 @@ jobs:
                               
         - name: Get Inputs 
           id: inputs
+#           run: |
+#               json_content=$(jq -c . < ./recipe/cmake/recipe.json)
+#               package_kind=$(echo "$json_content" | jq .package.kind)
+#               package_name=$(echo "$json_content" | jq .package.name)
+#               package_registry=$(echo "$json_content" | jq .package.registry
+
           run: |
-              json_content=$(jq -c . < ./recipe/cmake/recipe.json)
-              package_kind=$(echo "$json_content" | jq .package.kind)
-              package_name=$(echo "$json_content" | jq .package.name)
-              package_registry=$(echo "$json_content" | jq .package.registry
+               package_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)
+               package_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)
+               package_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)
+               package_platforms=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)
 
 
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
