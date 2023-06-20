@@ -99,7 +99,7 @@ jobs:
     needs: job1
     runs-on: ubuntu-latest
     steps:
-    - run: echo "${{fromJson(needs.job1.outputs.content)}}"
+    - run: echo "${{fromJson(needs.job1.outputs.package_name)}}"
             
 
 
