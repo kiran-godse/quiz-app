@@ -96,12 +96,13 @@ jobs:
             echo "content=$JSON" >> GITHUB_OUTPUT
             echo "$package_name"
           
-#   job2:
-#     needs: job1
-#     runs-on: ubuntu-latest
-#     steps:
-#     - run: echo "${{fromJson(needs.job1.outputs.package_name)}}"
-            
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          package_name: ${{needs.job1.outputs.package_name}}
+        run: echo "$package_name"
 
 
 
