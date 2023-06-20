@@ -75,15 +75,16 @@ jobs:
           id: inputs
           run: |
                package_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)
-               
+               package_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)
                
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
-               
+               echo "package_name=$package_name" >> $GITHUB_OUTPUT
                
         - name: Test Inputs
           id:   test
           run: |
                   echo "${{ steps.inputs.outputs.package_kind }}"
+                  echo "${{ steps.inputs.outputs.package_name }}"
                 
                
               
