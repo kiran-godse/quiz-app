@@ -84,22 +84,22 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      package_name: ${{ steps.read-json.outputs.matrix }}
+      package_name: ${{ steps.read-json.outputs.content }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: set-matrix
+      - name: set-content
         id: read-json
         run: |
             JSON=$(cat ./recipe/cmake/recipe.json)
-            echo "matrix=$JSON" >> $GITHUB_ENV
+            echo "content=$JSON" >> $GITHUB_ENV
           
   job2:
     needs: job1
     runs-on: ubuntu-latest
     steps:
-    - run: echo "${{fromJson(needs.job1.outputs.matrix)}}"
+    - run: echo "${{fromJson(needs.job1.outputs.content)}}"
             
 
 
