@@ -45,7 +45,7 @@ jobs:
                source_kind=$(echo "$json_content" | jq .source.kind)
                source_name=$(echo "$json_content" | jq .source.name)
                source_registry=$(echo "$json_content" | jq .source.registry)
-               source_details=$(echo "$json_content" | jq '.source')
+               source_details=$(echo "$json_content" | jq .source)
                echo "$json_content" | jq '.source.version'
                echo "$json_content" | jq '.source.version.value'
 
