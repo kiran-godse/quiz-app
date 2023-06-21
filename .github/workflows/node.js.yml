@@ -1,102 +1,57 @@
 
-name: Node.js CI
-
-on:
+name: Planner
+on: 
   workflow_dispatch:
-  push:
-    branches: [ master ]
+    inputs:
+      force_rebuild:
+        description:  'Force Rebuild'
+        required:     false
+        default:      false
+        type:         boolean
+
+  push:   
+    branches: [ "main" ]
+    paths:
+      - '**/cmake-**.yml'
+      - '**/cmake/**.json'
+
+  schedule:
+    - cron:  '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
 
-#   params:
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         shell: bash
+  params:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     
-#     outputs:
-#       package_name:                   ${{ steps.inputs.outputs.package.name }}
-#       crucible-registry:              ${{ steps.inputs.outputs.crucible_registry }}
-#       base-registry:                  ${{ steps.inputs.outputs.base_registry }}
-#       base-img-name:                  ${{ steps.inputs.outputs.base_image_name }}
-#       base-img-tag:                   ${{ steps.inputs.outputs.base_image_tag }}
-    
-#     steps:
-#       - name: Checkout Codebase
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
 
-#       - name: Get Inputs
-#         id:   inputs
-#         uses: zoexx/github-action-json-file-properties@release
-#         with:
-#           file_path: "./recipe/cmake.json"
-# #           prop_path: "package.name"
-
-#       - name: Echo Inputs
-#         run: |
-#           echo ${{steps.inputs.outputs.package.name}}
-          
-  get_inputs:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          shell: bash
-
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
-      
-
-        # - name: Get Inputs
-        #   id:   inputs
-        #   run: |
-        #           package_name=$( cat ${{vars.INPUT_PATH}} | jq -r '.package.name' )
-        #           package_kind=$( cat ${{vars.INPUT}} | jq -r '.package.kind' )
-        #           echo "package_name=$package_name" >> $GITHUB_OUTPUT
-        #           echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
-                  
-                  
-        # - name: Test Inputs
-        #   id:   test
-        #   run: |
-        #           echo "${{ steps.inputs.outputs.package_name }}"
-        #           echo "${{ steps.inputs.outputs.package_kind }}"
-                     
-                     
-#         - name: Get Inputs test
-#           id:   inputs1
-#           run: |
-#                 JSON= "$( cat ./recipe/cmake/recipe.json)" 
-#                 echo $JSON
-                
-                          
-                              
-        - name: Get Inputs 
-          id: inputs
-#           run: |
-#               json_content=$(jq -c . < ./recipe/cmake/recipe.json)
-#               package_kind=$(echo "$json_content" | jq .package.kind)
-#               package_name=$(echo "$json_content" | jq .package.name)
-#               package_registry=$(echo "$json_content" | jq .package.registry
-
-          run: |
-               package_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.kind)
-               package_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.name)
-               package_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.registry)
-               package_platforms=$(jq -c . < ./recipe/cmake/recipe.json | jq .package.platforms)
-               substrate_tag=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.tag)
-               substrate_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.name)
-               substrate_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.registry)
-               substrate_auth=$(jq -c . < ./recipe/cmake/recipe.json | jq .substrate.needs_auth)
-               source_kind=$(jq -c . < ./recipe/cmake/recipe.json | jq .source.kind)
-               source_name=$(jq -c . < ./recipe/cmake/recipe.json | jq .ssource.name)
-               source_registry=$(jq -c . < ./recipe/cmake/recipe.json | jq .source.registry)
-               source_version=$(jq -c . < ./recipe/cmake/recipe.json | jq .source.version.value)
+      - name: Get Inputs
+        id:   inputs
+        run: |
+               json_content=$(jq -c . < ./recipe/cmake/recipe.json)
+               package_kind=$(echo "$json_content" | jq .package.kind)
+               package_name=$(echo "$json_content" | jq .package.name)
+               package_registry=$(echo "$json_content" | jq .package.registry)
+               package_platforms=$(echo "$json_content" | jq .package.platforms[0])
+               substrate_tag=$(echo "$json_content" | jq .substrate.tag)
+               substrate_name=$(echo "$json_content" | jq .substrate.name)
+               substrate_registry=$(echo "$json_content" | jq .substrate.registry)
+               substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
+               source_kind=$(echo "$json_content" | jq .source.kind)
+               source_name=$(echo "$json_content" | jq .ssource.name)
+               source_registry=$(echo "$json_content" | jq .source.registry)
+               source_version=$(echo "$json_content" | jq '.source.version.value')
 
 
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
                echo "package_name=$package_name" >> $GITHUB_OUTPUT
                echo "package_registry=$package_registry" >> $GITHUB_OUTPUT
+               echo "package_platforms=$package_platforms" >> $GITHUB_OUTPUT
                echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
                echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
                echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
@@ -107,9 +62,9 @@ jobs:
                echo "source_version=$substrate_version" >> $GITHUB_OUTPUT
                
                
-        - name: Test Inputs
-          id:   test
-          run: |
+      - name: Test Inputs
+        id:   test
+        run: |
                   echo "${{ steps.inputs.outputs.package_kind }}"
                   echo "${{ steps.inputs.outputs.package_name }}"
                   echo "${{ steps.inputs.outputs.package_registry }}"
@@ -122,57 +77,3 @@ jobs:
                   echo "${{ steps.inputs.outputs.source_name }}"
                   echo "${{ steps.inputs.outputs.source_registry }}"
                   echo "${{ steps.inputs.outputs.source_version }}"
-
-               
-              
-  #            echo '${env.PACKAGE_JSON}'platforms
- #             echo "$(jq -r .c . < test.json | jq .SLACK_API_KEY)"
- #             jq -r .c myfile.json | jq .
-            
-            
-            
-            
-#             echo "package_name=$package_name" >> $GITHUB_OUTPUT
-            
-            
-            
-#         - name: Read recipe.json
-#           id: json
-#           run: |
-#             echo "${{ steps.inputs12.outputs.package_name }}"
-        #     echo "package_name"
-
-#   job1:
-#     runs-on: ubuntu-latest
-#     outputs:
-#       package_name: ${{ steps.read-json.outputs.content }}
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v2
-        
-#       - name: set-content
-#         id: read-json
-#         run: |
-#             JSON=$(cat ./recipe/cmake/recipe.json)
-#             echo "content=$JSON" >> GITHUB_OUTPUT
-#             echo "$package_name"
-          
-#   job2:
-#     needs: job1
-#     runs-on: ubuntu-latest
-#     steps:
-#       - env:
-#           package_name: ${{needs.job1.outputs.package_name}}
-#         run: echo "$package_name"
-
-
-
-               
-                  
-                  
-#         - name: Test Inputs1
-#           id:   test1
-#           run: |
-#                   echo "${{ steps.inputs.outputs.package_name }}"
-#                   echo "${{ steps.inputs.outputs.package_kind }}"
-                     
