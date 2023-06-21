@@ -45,7 +45,8 @@ jobs:
                source_kind=$(echo "$json_content" | jq .source.kind)
                source_name=$(echo "$json_content" | jq .ssource.name)
                source_registry=$(echo "$json_content" | jq .source.registry)
-               source_version=$(echo "$json_content" | jq .source.version)
+               source_version=$(echo "$json_content" | jq -r '.source.version.value')
+
 
 
                echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
