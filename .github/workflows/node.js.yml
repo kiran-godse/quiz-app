@@ -10,7 +10,7 @@ on:
         type:         boolean
 
   push:   
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - '**/cmake-**.yml'
       - '**/cmake/**.json'
