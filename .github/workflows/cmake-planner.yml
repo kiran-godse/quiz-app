@@ -45,7 +45,7 @@ jobs:
                source_kind=$(echo "$json_content" | jq .source.kind)
                source_name=$(echo "$json_content" | jq .source.name)
                source_registry=$(echo "$json_content" | jq .source.registry)
-               source=$(echo "$json_content" | jq '.source')
+               source_details=$(echo "$json_content" | jq '.source')
                echo "$json_content" | jq '.source.version'
                echo "$json_content" | jq '.source.version.value'
 
@@ -64,7 +64,7 @@ jobs:
                echo "source_name=$source_name" >> $GITHUB_OUTPUT
                echo "source_registry=$source_registry" >> $GITHUB_OUTPUT
                echo "source_version=$source_version" >> $GITHUB_OUTPUT
-               echo "source=$source" >>$GITHUB_OUTPUT
+               echo "source_details=$source" >>$GITHUB_OUTPUT
                
                
       - name: Test Inputs
@@ -82,4 +82,4 @@ jobs:
                   echo "${{ steps.inputs.outputs.source_name }}"
                   echo "${{ steps.inputs.outputs.source_registry }}"
                   echo "${{ steps.inputs.outputs.source_version }}"
-                  echo "${{ steps.inputs.outputs.source }}"
+                  echo "${{ steps.inputs.outputs.source_details }}"
