@@ -43,7 +43,7 @@ jobs:
                substrate_registry=$(echo "$json_content" | jq .substrate.registry)
                substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
                source_kind=$(echo "$json_content" | jq .source.kind)
-               source_name=$(echo "$json_content" | jq .ssource.name)
+               source_name=$(echo "$json_content" | jq .source.name)
                source_registry=$(echo "$json_content" | jq .source.registry)
                echo "$json_content" | jq '.source'
                echo "$json_content" | jq '.source.version'
@@ -61,9 +61,9 @@ jobs:
                echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
                echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
                echo "source_kind=$source_kind" >> $GITHUB_OUTPUT
-               echo "source_name=$substrate_name" >> $GITHUB_OUTPUT
-               echo "source_registry=$substrate_registry" >> $GITHUB_OUTPUT
-               echo "source_version=$substrate_version" >> $GITHUB_OUTPUT
+               echo "source_name=$source_name" >> $GITHUB_OUTPUT
+               echo "source_registry=$source_registry" >> $GITHUB_OUTPUT
+               echo "source_version=$source_version" >> $GITHUB_OUTPUT
                
                
       - name: Test Inputs
