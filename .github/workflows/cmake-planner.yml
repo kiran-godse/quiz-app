@@ -1,92 +1,79 @@
-
 name: Planner
-on: 
+
+on:
   workflow_dispatch:
     inputs:
       force_rebuild:
-        description:  'Force Rebuild'
-        required:     false
-        default:      false
-        type:         boolean
+        description: 'Force Rebuild'
+        required: false
+        default: false
+        type: boolean
 
-  push:   
+  push:
     branches: [ "master" ]
     paths:
       - '**/cmake-**.yml'
       - '**/cmake/**.json'
 
   schedule:
-    - cron:  '0 0 * * 0' # “At 00:00 on every Sunday”
+    - cron: '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
-
-  params:
+  planner:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v3
 
       - name: Get Inputs
-        id:   inputs
+        id: inputs
         run: |
-               json_content=$(jq -c . < ./recipe/cmake/recipe.json)
-               package_kind=$(echo "$json_content" | jq .package.kind)
-               package_name=$(echo "$json_content" | jq .package.name)
-               package_registry=$(echo "$json_content" | jq .package.registry)
-               package_platforms=$(echo "$json_content" | jq .package.platforms[0])
-               substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-               substrate_name=$(echo "$json_content" | jq .substrate.name)
-               substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-               substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
-               source_kind=$(echo "$json_content" | jq .source.kind)
-               source_name=$(echo "$json_content" | jq .source.name)
-               source_registry=$(echo "$json_content" | jq .source.registry)
-               source_details=$(echo "$json_content" | jq .source)
-               echo "$json_content" | jq '.source.version'
-               echo "$json_content" | jq '.source.version.value'
+          json_content=$(jq -c . < ./recipe/cmake/recipe.json)
+          package_kind=$(echo "$json_content" | jq -r .package.kind)
+          package_name=$(echo "$json_content" | jq -r .package.name)
+          package_registry=$(echo "$json_content" | jq -r .package.registry)
+          package_platforms=$(echo "$json_content" | jq -r .package.platforms[0])
+          substrate_tag=$(echo "$json_content" | jq -r .substrate.tag)
+          substrate_name=$(echo "$json_content" | jq -r .substrate.name)
+          substrate_registry=$(echo "$json_content" | jq -r .substrate.registry)
+          substrate_auth=$(echo "$json_content" | jq -r .substrate.needs_auth)
+          source_kind=$(echo "$json_content" | jq -r .source.kind)
+          source_name=$(echo "$json_content" | jq -r .source.name)
+          source_registry=$(echo "$json_content" | jq -r .source.registry)
+          source_version=$(echo "$json_content" | jq -r .source.version.value)
+          source_details=$(echo "$json_content" | jq -c .source)
+          
+          echo "package_kind=$package_kind" >> $GITHUB_ENV
+          echo "package_name=$package_name" >> $GITHUB_ENV
+          echo "package_registry=$package_registry" >> $GITHUB_ENV
+          echo "package_platforms=$package_platforms" >> $GITHUB_ENV
+          echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
+          echo "substrate_name=$substrate_name" >> $GITHUB_ENV
+          echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
+          echo "substrate_auth=$substrate_auth" >> $GITHUB_ENV
+          echo "source_kind=$source_kind" >> $GITHUB_ENV
+          echo "source_name=$source_name" >> $GITHUB_ENV
+          echo "source_registry=$source_registry" >> $GITHUB_ENV
+          echo "source_version=$source_version" >> $GITHUB_ENV
+          echo "source_details=$source_details" >> $GITHUB_ENV
 
-
-
-
-               echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
-               echo "package_name=$package_name" >> $GITHUB_OUTPUT
-               echo "package_registry=$package_registry" >> $GITHUB_OUTPUT
-               echo "package_platforms=$package_platforms" >> $GITHUB_OUTPUT
-               echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
-               echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
-               echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
-               echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
-               echo "source_kind=$source_kind" >> $GITHUB_OUTPUT
-               echo "source_name=$source_name" >> $GITHUB_OUTPUT
-               echo "source_registry=$source_registry" >> $GITHUB_OUTPUT
-               echo "source_version=$source_version" >> $GITHUB_OUTPUT
-               echo "source_details=$source" >>$GITHUB_OUTPUT
-               
-               
       - name: Test Inputs
-        id:   test
         run: |
-                  echo "${{ steps.inputs.outputs.package_kind }}"
-                  echo "${{ steps.inputs.outputs.package_name }}"
-                  echo "${{ steps.inputs.outputs.package_registry }}"
-                  echo "${{ steps.inputs.outputs.package_platforms }}"
-                  echo "${{ steps.inputs.outputs.substrate_tag }}"
-                  echo "${{ steps.inputs.outputs.substrate_name }}"
-                  echo "${{ steps.inputs.outputs.substrate_registry }}"
-                  echo "${{ steps.inputs.outputs.substrate_auth }}"
-                  echo "${{ steps.inputs.outputs.source_kind }}"
-                  echo "${{ steps.inputs.outputs.source_name }}"
-                  echo "${{ steps.inputs.outputs.source_registry }}"
-                  echo "${{ steps.inputs.outputs.source_version }}"
-                  echo "${{ steps.inputs.outputs.source_details }}"
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
+          echo "package_kind: ${{ env.package_kind }}"
+          echo "package_name: ${{ env.package_name }}"
+          echo "package_registry: ${{ env.package_registry }}"
+          echo "package_platforms: ${{ env.package_platforms }}"
+          echo "substrate_tag: ${{ env.substrate_tag }}"
+          echo "substrate_name: ${{ env.substrate_name }}"
+          echo "substrate_registry: ${{ env.substrate_registry }}"
+          echo "substrate_auth: ${{ env.substrate_auth }}"
+          echo "source_kind: ${{ env.source_kind }}"
+          echo "source_name: ${{ env.source_name }}"
+          echo "source_registry: ${{ env.source_registry }}"
+          echo "source_version: ${{ env.source_version }}"
+          echo "source_details: ${{ env.source_details }}"
+      
       - name: Get Upstream Version
         id: upstream-version
         uses: your-action-repo/get-upstream-version-action@v1
