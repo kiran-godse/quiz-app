@@ -83,3 +83,13 @@ jobs:
                   echo "${{ steps.inputs.outputs.source_registry }}"
                   echo "${{ steps.inputs.outputs.source_version }}"
                   echo "${{ steps.inputs.outputs.source_details }}"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get Upstream Version
+        id: upstream-version
+        uses: your-action-repo/get-upstream-version-action@v1
+
+      - name: Display Upstream Version
+        run: echo "Upstream version is ${{ steps.upstream-version.outputs.version }}"
