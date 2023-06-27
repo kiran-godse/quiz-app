@@ -40,8 +40,8 @@ jobs:
         id: upstream-version
         uses: your-action-repo/get-upstream-version-action@v3
 
-      - name: Display Upstream Version
-        run: echo "Upstream version is ${{ steps.upstream-version.outputs.version }}"    
+#       - name: Display Upstream Version
+#         run: echo "Upstream version is ${{ steps.upstream-version.outputs.version }}"    
                
       - name: Test Inputs
         id:   test
