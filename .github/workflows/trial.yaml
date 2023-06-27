@@ -1,8 +1,50 @@
-name: hello-world
-'on': push
+name: Custom Action Workflow
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  my-job:
+  build:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: my-step
-        run: echo "Hello World!"
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+      
+    - name: Build and Push Docker Image
+      id: build_image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: ${{ steps.tag.outputs.tag }}
+        builder: ${{ github.token }}
+        
+    - name: Read Name, Tag, Registry, and NeedsAuth inputs
+      id: read_inputs
+      run: |
+        echo "::set-output name=name::${{ github.event.inputs.name }}"
+        echo "::set-output name=tag::${{ github.event.inputs.tag }}"
+        echo "::set-output name=registry::${{ github.event.inputs.registry }}"
+        echo "::set-output name=needs_auth::${{ github.event.inputs.needs_auth }}"
+        
+    - name: Print Inputs
+      run: |
+        echo "Name: ${{ steps.read_inputs.outputs.name }}"
+        echo "Tag: ${{ steps.read_inputs.outputs.tag }}"
+        echo "Registry: ${{ steps.read_inputs.outputs.registry }}"
+        echo "Needs Auth: ${{ steps.read_inputs.outputs.needs_auth }}"
+# name: hello-world
+# 'on': push
+# jobs:
+#   my-job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: my-step
+#         run: echo "Hello World!"
