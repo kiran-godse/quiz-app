@@ -1,0 +1,21 @@
+name: Custom Action Workflow
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run custom action
+        uses: your-custom-action-repo@v1
+        with:
+          name: ${{ github.event.inputs.name }}
+          tag: ${{ github.event.inputs.tag }}
+          registry: ${{ github.event.inputs.registry }}
+          needsAuth: ${{ github.event.inputs.needsAuth }}
