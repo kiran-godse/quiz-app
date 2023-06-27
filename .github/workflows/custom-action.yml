@@ -1,21 +1,87 @@
-name: Custom Action Workflow
+name: Planner
+
 on:
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force Rebuild'
+        required: false
+        default: false
+        type: boolean
+
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+    paths:
+      - '**/cmake-**.yml'
+      - '**/cmake-**.json'
+
+  schedule:
+    - cron: '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  params:
+    runs-on: self-hosted
+    defaults:
+      run:
+        shell: bash
+    outputs:
+      src-repo: ${{ steps.inputs.outputs.src_repo }}
+      crucible-registry: ${{ steps.inputs.outputs.crucible_registry }}
+      base-registry: ${{ steps.inputs.outputs.base_registry }}
+      base-img-name: ${{ steps.inputs.outputs.base_image_name }}
+      base-img-tag: ${{ steps.inputs.outputs.base_image_tag }}
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
 
-      - name: Run custom action
-        uses: your-custom-action-repo@v1
+      - name: Get Inputs
+        id: inputs
+        uses: zoexx/github-action-json-file-properties@release
         with:
-          name: ${{ github.event.inputs.name }}
-          tag: ${{ github.event.inputs.tag }}
-          registry: ${{ github.event.inputs.registry }}
-          needsAuth: ${{ github.event.inputs.needsAuth }}
+          file_path: "./artefacts/inputs.json"
+
+      - name: Echo Inputs
+        run: |
+          echo ${{ steps.inputs.outputs.src_repo }}
+          echo ${{ steps.inputs.outputs.crucible_registry }}
+          echo ${{ steps.inputs.outputs.base_registry }}
+          echo ${{ steps.inputs.outputs.base_image_name }}
+          echo ${{ steps.inputs.outputs.base_image_tag }}
+
+  prelude:
+    needs: params
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      packages: read
+      contents: read
+    outputs:
+      src-upstream-rel-version: ${{ steps.src-info.outputs.version }}
+      src-upstream-rel-time: ${{ steps.src-info.outputs.published_at }}
+      src-current-version: ${{ steps.crucible-src.outputs.version }}
+      src-current-build-time: ${{ steps.crucible-src.outputs.created_at }}
+      base-img-name: ${{ steps.base-image.outputs.name }}
+      base-img-tag: ${{ steps.base-image.outputs.tag }}
+      img-digest: ${{ steps.crucible-meta.outputs.version }}
+      img-scavenge-timestamps: ${{ steps.scavenge-info.outputs.timestamps }}
+      img-scavenge-versions: ${{ steps.scavenge-info.outputs.versions }}
+      will-rebuild-src: ${{ steps.recommender.outputs.rebuild }}
+    
+    steps:
+      - name: Get Latest Source Release Info
+        id: src-info
+        run: |
+          BASE_URL="https://api.github.com/repos/${{ needs.params.outputs.src-repo }}"
+          RELEASE_SUFFIX="releases/latest"
+          COMMITS_SUFFIX="commits"
+
+          TAG=$(curl -L -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "${BASE_URL}/$RELEASE_SUFFIX")
+          VERSION=$(echo $TAG | jq -r '.tag_name')
+          echo "version=${VERSION:=main}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION:=main}" 
+
+          if [ -z "$VERSION"  ]; then
+            COMMITS=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28
