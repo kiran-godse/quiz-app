@@ -1,0 +1,22 @@
+name: Basic Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set Base Image
+        run: |
+          baseImgName="my-base-image"  # Replace with your base image name
+          baseImgTag="latest"          # Replace with your base image tag/version
+
+          echo "Base Image Name: $baseImgName"
+          echo "Base Image Tag: $baseImgTag"
