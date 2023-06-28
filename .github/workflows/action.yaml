@@ -1,25 +1,58 @@
-name: Planner trail
 
-on:
+name: Planner
+on: 
   workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description:  'Force Rebuild'
+        required:     false
+        default:      false
+        type:         boolean
+
+  push:   
+    branches: [ "master" ]
+    paths:
+      - '**/cmake-**.yml'
+      - '**/cmake/**.json'
+
+  schedule:
+    - cron:  '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
-  get-base-image:
+
+  params:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    
     steps:
-      - name: Set Base Image Name and Tag
-        id: base-image
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
+        
+      - name: Custom JSON reader Action
+        id: inputs
+        uses: Swapnil-Devops/recipe-reader-js@main
+        with:
+          json-file: ./recipe/cmake/recipe.json
+          schema-file: ./.schema/recipe.json
+        
+      - name: outputs
+        id: set_output
         run: |
-          baseImgName="my-base-image"  # Replace with your base image name
-          baseImgTag="latest"          # Replace with your base image tag/version
-          echo "::set-output name=image-name::${baseImgName}"
-          echo "::set-output name=image-tag::${baseImgTag}"
-  
-      - name: Get Base Image Digest
-        id: base-image-digest
+               json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .)
+               package_kind=$(echo "$json_content" | jq .package.kind)
+              
+
+
+               echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
+               echo "package_name=$package_name" >> $GITHUB_OUTPUT
+          
+               
+               
+      - name: Test outputs
+        id:   test
         run: |
-          imageName="${{ needs.base-image.outputs.image-name }}"
-          imageTag="${{ needs.base-image.outputs.image-tag }}"
-          manifest=$(docker buildx imagetools inspect "${imageName}:${imageTag}" --format "{{json .Manifest}}")
-          tag=$(echo "${manifest}" | jq -r '.digest')
-          echo "::set-output name=image-digest::${tag}"
+                  echo "${{ steps.set_output.outputs.package_kind }}"
+                  echo "${{ steps.set_output.outputs.package_name }}"
+                  
