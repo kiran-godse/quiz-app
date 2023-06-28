@@ -1,4 +1,4 @@
-name: Planner
+name: Planner trail
 
 on:
   workflow_dispatch:
