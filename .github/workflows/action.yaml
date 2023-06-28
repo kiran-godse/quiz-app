@@ -10,17 +10,11 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
-      - name: Get Base Image Upstream Version
-        id: get-base-image-version
+        
+      - name: Get Base Image Tag 
+        id:   base-image
         run: |
-          baseImgName="${{ steps.inputs.outputs.base_img_name }}"
-          baseImgTag="${{ steps.inputs.outputs.base_img_tag }}"
-          manifest=$(docker buildx imagetools inspect "${baseImgName}:${baseImgTag}" --format "{{json .Manifest}}")
-          upstreamVersion=$(echo "${manifest}" | jq -r '.config.Labels["org.opencontainers.image.version"]')
+          echo "name=${{ needs.params.outputs.base-img-name }}" >> "$GITHUB_OUTPUT"
+          echo "tag=$( docker buildx imagetools inspect ${{ needs.params.outputs.base-img-name }}:${{ needs.params.outputs.base-img-tag}}  --format "{{json .Manifest}}"  | jq -r '.digest' )" >> "$GITHUB_OUTPUT"
 
-          echo "::set-output name=upstream_version::${upstreamVersion}"
-
-      - name: Display Base Image Upstream Version
-        run: |
-          echo "Base Image Upstream Version: ${{ needs.get-base-image-version.outputs.upstream_version }}"
+     
