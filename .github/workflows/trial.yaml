@@ -7,17 +7,13 @@ jobs:
   get-base-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Set Base Image Name
+      - name: Get Base Image Tag
         id: base-image
         run: |
-          baseImgName="docker.io/debian:stable-slim"  # Replace with your base image name
-          echo "IMAGE_NAME=${baseImgName}" >> $GITHUB_ENV
-  
-      - name: Get Base Image Digest
-        id: base-image-digest
-        run: |
-          imageName="${{ needs.base-image.outputs.IMAGE_NAME }}"
-          imageTag=""
-          manifest=$(docker buildx imagetools inspect "${imageName}:${imageTag}" --format "{{json .Manifest}}")
+          baseImgName="docker.io/debian:stable-slim"
+          baseImgTag="latest"
+    
+          echo "name=${baseImgName}" >> $GITHUB_ENV
+          manifest=$(docker buildx imagetools inspect "${baseImgName}:${baseImgTag}" --format "{{json .Manifest}}")
           tag=$(echo "${manifest}" | jq -r '.digest')
-          echo "IMAGE_DIGEST=${tag}" >> $GITHUB_ENV
+          echo "tag=${tag}" >> $GITHUB_ENV
