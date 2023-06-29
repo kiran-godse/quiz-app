@@ -5,16 +5,17 @@ on:
 jobs:
   get_version:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Set Base Image
-        run: echo "baseImgName=alpine:latest" >> $GITHUB_ENV
+        run: echo "baseImgName=docker.io/debian:stable-slim" >> $GITHUB_ENV
       
       - name: Get Base Image Version
         id: base-image
         run: |
           manifest=$(docker buildx imagetools inspect "${{ env.baseImgName }}" --format "{{json .Manifest}}")
           upstreamVersion=$(echo "${manifest}" | jq -r '.config.Labels["org.opencontainers.image.version"]')
-          echo "::set-output name=upstreamVersion::${upstreamVersion}"
+          echo "upstreamVersion=${upstreamVersion}" >> $GITHUB_ENV
       
-      - name: Display Version
-        run: echo "Base Image Version: ${{ needs.base-image.outputs.upstreamVersion }}"
+#       - name: Display Version
+#         run: echo "Base Image Version: ${{ env.upstreamVersion }}"
