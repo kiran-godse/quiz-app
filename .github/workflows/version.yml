@@ -1,22 +1,16 @@
-name: Basic Workflow
+name: Planner trialversion
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  get-base-image:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set Base Image
+      - name: Get Base Image Tag
+        id: base-image
         run: |
-          baseImgName="my-base-image"  # Replace with your base image name
-          baseImgTag="latest"          # Replace with your base image tag/version
-
-          echo "Base Image Name: $baseImgName"
-          echo "Base Image Tag: $baseImgTag"
+          echo "baseImgName=docker.io/debian:stable-slim" >> $GITHUB_ENV
+          manifest=$(docker buildx imagetools inspect "docker.io/debian:stable-slim" --format "{{json .Manifest}}")
+          upstreamVersion=$(echo "${manifest}" | jq -r '.config.Labels["org.opencontainers.image.version"]')
+          echo "::set-output name=upstream_version::${upstreamVersion}"
