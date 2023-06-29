@@ -14,6 +14,6 @@ jobs:
           baseImgTag="latest"
     
           echo "name=${baseImgName}" >> $GITHUB_ENV
-          manifest=$(docker buildx imagetools inspect "${baseImgName}:${baseImgTag}" --format "{{json .Manifest}}")
-          tag=$(echo "${manifest}" | jq -r '.digest')
+          manifest=$(docker buildx imagetools inspect "${baseImgName}" --format "{{json .Manifest}}")
+          tag=$(echo "${manifest}" | jq -r '.config.digest')
           echo "tag=${tag}" >> $GITHUB_ENV
