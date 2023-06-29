@@ -1,19 +1,20 @@
-name: Planner trail
-
+name: Get Base Image Version
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
-  get-base-image:
+  get_version:
     runs-on: ubuntu-latest
     steps:
-      - name: Get Base Image Tag
+      - name: Set Base Image
+        run: echo "baseImgName=alpine:latest" >> $GITHUB_ENV
+      
+      - name: Get Base Image Version
         id: base-image
         run: |
-          baseImgName="docker.io/debian:stable-slim"
-          baseImgTag="latest"
-    
-          echo "name=${baseImgName}" >> $GITHUB_ENV
-          manifest=$(docker buildx imagetools inspect "${baseImgName}" --format "{{json .Manifest}}")
-          tag=$(echo "${manifest}" | jq -r '.config.digest')
-          echo "tag=${tag}" >> $GITHUB_ENV
+          manifest=$(docker buildx imagetools inspect "${{ env.baseImgName }}" --format "{{json .Manifest}}")
+          upstreamVersion=$(echo "${manifest}" | jq -r '.config.Labels["org.opencontainers.image.version"]')
+          echo "upstreamVersion=${upstreamVersion}" >> $GITHUB_ENV
+      
+      - name: Display Version
+        run: echo "Base Image Version: ${{ env.upstreamVersion }}"
