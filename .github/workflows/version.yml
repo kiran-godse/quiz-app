@@ -29,7 +29,7 @@ jobs:
 
       - name: Custom JSON Validation Action
         id: validation
-        uses: Swapnil-Devops/recipe-validator-js@main
+        uses: Nodejs-Rainfall/index.js @main
         with:
           json-file: ./recipe/cmake/recipe.json
           schema-file: ./.schema/recipe.json
@@ -40,12 +40,13 @@ jobs:
           echo "Validation Result: ${{ steps.validation.outputs.validation-result }}"
 
       - name: Set Validation Status
-        if: ${{ steps.validation_result.outputs.validation-result == 'valid' }}
         run: |
-          echo "The JSON file is valid. Proceed with further steps."
-        else:
-          echo "The JSON file is invalid. Exiting the workflow."
-          exit 1
+          if [[ "${{ steps.validation_result.outputs.validation-result }}" == "valid" ]]; then
+            echo "The JSON file is valid. Proceed with further steps."
+          else
+            echo "The JSON file is invalid. Exiting the workflow."
+            exit 1
+          fi
 
       - name: Extract JSON Content
         id: extract_content
