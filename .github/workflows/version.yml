@@ -16,7 +16,7 @@ on:
       - '**/cmake/**.json'
 
 jobs:
-  params:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,52 +25,26 @@ jobs:
 
       - name: Custom JSON reader Action
         id: inputs
-        uses: kiran-godse/Nodejs-Rainfall@main
-        with:
-          json-file: ./recipe/cmake/recipe.json
+        uses: ./
 
       - name: Test outputs
         id: test
         run: |
           echo "${{ steps.inputs.outputs.json }}"
-          
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-      - name: Extract Outputs
-        id: set_output
-        run: |
-          json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .)
-          package_kind=$(echo "$json_content" | jq .package.kind)
-          package_name=$(echo "$json_content" | jq .package.name)
-          package_registry=$(echo "$json_content" | jq .package.registry)
-          package_platforms=$(echo "$json_content" | jq .package.platforms[0])
-          substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-          substrate_name=$(echo "$json_content" | jq .substrate.name)
-          substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-          substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
-          source_kind=$(echo "$json_content" | jq .source.kind)
-          source_name=$(echo "$json_content" | jq .ssource.name)
-          source_registry=$(echo "$json_content" | jq .source.registry)
-          source_version=$(echo "$json_content" | jq .source.version.value)
-          echo "package_kind=$package_kind" >> $GITHUB_ENV
-          echo "package_name=$package_name" >> $GITHUB_ENV
-          echo "package_registry=$package_registry" >> $GITHUB_ENV
-          echo "package_platforms=$package_platforms" >> $GITHUB_ENV
-          echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
-          echo "substrate_name=$substrate_name" >> $GITHUB_ENV
-          echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
-          
+      - name: Run Action
+        run: node index.js
 
-      - name: Test Output Variables
+      - name: Get Action Output
+        id: output
         run: |
-          echo "package_kind=${{ env.package_kind }}"
-          echo "package_name=${{ env.package_name }}"
-          echo "package_registry=${{ env.package_registry }}"
-          echo "package_platforms=${{ env.package_platforms }}"
-          echo "substrate_tag=${{ env.substrate_tag }}"
-          echo "substrate_name=${{ env.substrate_name }}"
-          echo "substrate_registry=${{ env.substrate_registry }}"
-       
+          echo "::set-output name=json::$(cat output.json)"
+      
+      - name: Print Action Output
+        run: |
+          echo ${{ steps.output.outputs.json }}
