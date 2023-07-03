@@ -31,7 +31,7 @@ jobs:
         
       - name: Custom JSON reader Action
         id: inputs
-        uses: Swapnil-Devops/recipe-reader-js@main
+        uses: kiran-godse/Nodejs-Rainfall@main
         with:
           json-file: ./recipe/cmake/recipe.json
           schema-file: ./.schema/recipe.json
