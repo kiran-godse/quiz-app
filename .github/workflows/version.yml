@@ -21,17 +21,14 @@ on:
 jobs:
   params:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
 
-  steps:
+    steps:
     - name: Checkout Codebase
       uses: actions/checkout@v3
 
     - name: Custom JSON reader Action
       id: inputs
-      uses: kiran-godse/Nodejs-Rainfall@main
+      uses: Swapnil-Devops/recipe-reader-js@main
       with:
         json-file: ./recipe/cmake/recipe.json
         schema-file: ./.schema/recipe.json
@@ -49,7 +46,7 @@ jobs:
         substrate_registry=$(echo "$json_content" | jq .substrate.registry)
         substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
         source_kind=$(echo "$json_content" | jq .source.kind)
-        source_name=$(echo "$json_content" | jq .ssource.name)
+        source_name=$(echo "$json_content" | jq .source.name)
         source_registry=$(echo "$json_content" | jq .source.registry)
         source_version=$(echo "$json_content" | jq .source.version.value)
         echo "package_kind=$package_kind" >> $GITHUB_ENV
@@ -93,9 +90,9 @@ jobs:
         with:
           node-version: '16'
 
-#       - name: Get Package Metadata
-#         id: get-metadata
-#         uses: ./.github/actions/get-package-metadata@main
-#         with:
-#           package-name: 'gcr-demo'
-#           token: ${{ secrets.GH_TOKEN }}
+      - name: Get Package Metadata
+        id: get-metadata
+        uses: ./.github/actions/get-package-metadata@main
+        with:
+          package-name: 'gcr-demo'
+          token: ${{ secrets.GH_TOKEN }}
