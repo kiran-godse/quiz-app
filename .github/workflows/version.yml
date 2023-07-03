@@ -41,26 +41,12 @@ jobs:
         package_name=$(echo "$json_content" | jq .package.name)
         package_registry=$(echo "$json_content" | jq .package.registry)
         package_platforms=$(echo "$json_content" | jq .package.platforms[0])
-        substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-        substrate_name=$(echo "$json_content" | jq .substrate.name)
-        substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-        substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
-        source_kind=$(echo "$json_content" | jq .source.kind)
-        source_name=$(echo "$json_content" | jq .source.name)
-        source_registry=$(echo "$json_content" | jq .source.registry)
-        source_version=$(echo "$json_content" | jq .source.version.value)
+        
         echo "package_kind=$package_kind" >> $GITHUB_ENV
         echo "package_name=$package_name" >> $GITHUB_ENV
         echo "package_registry=$package_registry" >> $GITHUB_ENV
         echo "package_platforms=$package_platforms" >> $GITHUB_ENV
-        echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
-        echo "substrate_name=$substrate_name" >> $GITHUB_ENV
-        echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
-        echo "substrate_auth=$substrate_auth" >> $GITHUB_ENV
-        echo "source_kind=$source_kind" >> $GITHUB_ENV
-        echo "source_name=$source_name" >> $GITHUB_ENV
-        echo "source_registry=$source_registry" >> $GITHUB_ENV
-        echo "source_version=$source_version" >> $GITHUB_ENV
+        
 
     - name: Test outputs
       id: test
@@ -69,30 +55,23 @@ jobs:
         echo "package_name=${{ steps.set_output.outputs.package_name }}"
         echo "package_registry=${{ steps.set_output.outputs.package_registry }}"
         echo "package_platforms=${{ steps.set_output.outputs.package_platforms }}"
-        echo "substrate_tag=${{ steps.set_output.outputs.substrate_tag }}"
-        echo "substrate_name=${{ steps.set_output.outputs.substrate_name }}"
-        echo "substrate_registry=${{ steps.set_output.outputs.substrate_registry }}"
-        echo "substrate_auth=${{ steps.set_output.outputs.substrate_auth }}"
-        echo "source_kind=${{ steps.set_output.outputs.source_kind }}"
-        echo "source_name=${{ steps.set_output.outputs.source_name }}"
-        echo "source_registry=${{ steps.set_output.outputs.source_registry }}"
-        echo "source_version=${{ steps.set_output.outputs.source_version }}"
+        
 
-  retrieve-package-metadata:
-    runs-on: ubuntu-latest
+#   retrieve-package-metadata:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
 
-      - name: Get Package Metadata
-        id: get-metadata
-        uses: ./.github/actions/get-package-metadata@main
-        with:
-          package-name: 'gcr-demo'
-          token: ${{ secrets.GH_TOKEN }}
+#       - name: Get Package Metadata
+#         id: get-metadata
+#         uses: ./.github/actions/get-package-metadata@main
+#         with:
+#           package-name: 'gcr-demo'
+#           token: ${{ secrets.GH_TOKEN }}
