@@ -25,7 +25,10 @@ jobs:
 
       - name: Custom JSON reader Action
         id: inputs
-        uses: ./
+        uses: ./index.js
+
+      # Rest of your steps
+
 
       - name: Test outputs
         id: test
