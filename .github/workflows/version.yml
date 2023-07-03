@@ -33,75 +33,44 @@ jobs:
         id: test
         run: |
           echo "${{ steps.inputs.outputs.json }}"
-
+          
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-
-        
-      - name: outputs
+      - name: Extract Outputs
         id: set_output
         run: |
-               json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .)
-               package_kind=$(echo "$json_content" | jq .package.kind)
-               package_name=$(echo "$json_content" | jq .package.name)
-               package_registry=$(echo "$json_content" | jq .package.registry)
-               package_platforms=$(echo "$json_content" | jq .package.platforms[0])
-               substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-               substrate_name=$(echo "$json_content" | jq .substrate.name)
-               substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-               substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
-               source_kind=$(echo "$json_content" | jq .source.kind)
-               source_name=$(echo "$json_content" | jq .ssource.name)
-               source_registry=$(echo "$json_content" | jq .source.registry)
-               source_version=$(echo "$json_content" | jq .source.version.value)
+          json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .)
+          package_kind=$(echo "$json_content" | jq .package.kind)
+          package_name=$(echo "$json_content" | jq .package.name)
+          package_registry=$(echo "$json_content" | jq .package.registry)
+          package_platforms=$(echo "$json_content" | jq .package.platforms[0])
+          substrate_tag=$(echo "$json_content" | jq .substrate.tag)
+          substrate_name=$(echo "$json_content" | jq .substrate.name)
+          substrate_registry=$(echo "$json_content" | jq .substrate.registry)
+          substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
+          source_kind=$(echo "$json_content" | jq .source.kind)
+          source_name=$(echo "$json_content" | jq .ssource.name)
+          source_registry=$(echo "$json_content" | jq .source.registry)
+          source_version=$(echo "$json_content" | jq .source.version.value)
+          echo "package_kind=$package_kind" >> $GITHUB_ENV
+          echo "package_name=$package_name" >> $GITHUB_ENV
+          echo "package_registry=$package_registry" >> $GITHUB_ENV
+          echo "package_platforms=$package_platforms" >> $GITHUB_ENV
+          echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
+          echo "substrate_name=$substrate_name" >> $GITHUB_ENV
+          echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
+          
 
-
-               echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
-               echo "package_name=$package_name" >> $GITHUB_OUTPUT
-               echo "package_registry=$package_registry" >> $GITHUB_OUTPUT
-               echo "package_platforms=$package_platforms" >> $GITHUB_OUTPUT
-               echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
-               echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
-               echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
-               echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
-               echo "source_kind=$source_kind" >> $GITHUB_OUTPUT
-               echo "source_name=$source_name" >> $GITHUB_OUTPUT
-               echo "source_registry=$source_registry" >> $GITHUB_OUTPUT
-               echo "source_version=$source_version" >> $GITHUB_OUTPUT
-               
-               
-      - name: Test outputs
-        id:   test
+      - name: Test Output Variables
         run: |
-                  echo "${{ steps.set_output.outputs.package_kind }}"
-                  echo "${{ steps.set_output.outputs.package_name }}"
-                  echo "${{ steps.set_output.outputs.package_registry }}"
-                  echo "${{ steps.set_output.outputs.package_platforms }}"
-                  echo "${{ steps.set_output.outputs.substrate_tag }}"
-                  echo "${{ steps.set_output.outputs.substrate_name }}"
-                  echo "${{ steps.set_output.outputs.substrate_registry }}"
-                  echo "${{ steps.set_output.outputs.substrate_auth }}"
-                  echo "${{ steps.set_output.outputs.source_kind }}"
-                  echo "${{ steps.set_output.outputs.source_name }}"
-                  echo "${{ steps.set_output.outputs.source_registry }}"
-                  echo "${{ steps.set_output.outputs.source_version }}"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-#       - name: Get Package Metadata
-#         id: get-metadata
-#         uses: Swapnil-Devops/Package-Introspection-Action@main
-#         with:
-#           package-name: 'ghcr.io/swapnil-devops/gcr-demo:latest'
-#           token: ${{ secrets.GH_TOKEN }}            
-  
-      
-
-#       # - name: Print Package Metadata
-#       #   run: echo "Package metadata: ${{ steps.get-metadata.outputs.package-metadata }}" 
+          echo "package_kind=${{ env.package_kind }}"
+          echo "package_name=${{ env.package_name }}"
+          echo "package_registry=${{ env.package_registry }}"
+          echo "package_platforms=${{ env.package_platforms }}"
+          echo "substrate_tag=${{ env.substrate_tag }}"
+          echo "substrate_name=${{ env.substrate_name }}"
+          echo "substrate_registry=${{ env.substrate_registry }}"
+       
