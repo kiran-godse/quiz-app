@@ -1,0 +1,211 @@
+{
+    "$schema":          "https://json-schema.org/draft/2020-12/schema",
+
+    "title":            "Flow Definition",
+    "description":      "A DSL for configuring Github Workflows to create Rainfall artefacts.",
+    "type":             "object",
+
+    "$defs": 
+    {
+        "auth_check": 
+        {
+            "description":  "Is authentication needed? Credentials are automatically extracted from Secrets in order to ensure security. Please ensure the Secrets are populated by an Org. Owner.", 
+            "type":         "boolean",
+            "default":      "false"
+        }
+    },
+     
+    "properties": 
+    {
+     
+       "package": 
+       {
+          "description":        "The output package that is created from the definition and uploaded to a registry.",
+          "type":               "object",
+          "properties":
+          {
+            "kind":
+            {
+                "description":  "The type of the output package.",
+                "type":         "string",
+                "enum":
+                [
+                    "image",
+                    "tarball"
+                ],
+                "default": "image"
+            },
+            "name":
+            {
+                "description":  "The name of the package.",
+                "type":         "string",
+                "cname":        "output.name",
+
+                "minLength":    3
+            },
+            "registry":
+            {
+                "description":  "The registry to publish the output package.",
+                "type":         "string",
+                "enum":
+                [
+                    "github",
+                    "docker",
+                    "amazon",
+                    "microsoft",
+                    "google",
+                    "redhat",
+                    "jfrog"
+                ],
+                "default": "github"
+            },
+            "platforms":
+            {
+                "type":         "array",
+                "uniqueItems":  "true",
+                "description":  "The target platforms for the output package.",
+                "items":
+                {
+                    "type":         "string",
+                    "enum":
+                    [
+                        "arm64",
+                        "arm32",
+                        "amd64"
+                    ]
+                }
+            }
+          }
+       },
+     
+       "substrate": 
+       {
+          "description":    "The image that serves as the substrate for the package.}",    
+          "type":               "object",
+          "properties":
+          {
+            "name":
+            {
+                "description":  "The name of the substrate.",
+                "type":         "string",
+                "minLength":    3
+            },
+            "tag":
+            {
+                "description":  "The tag of the substrate.",
+                "type":         "string",
+                "minLength":    3,
+                "default":      "latest"
+            },
+            "registry":
+            {
+                "description":  "The registry to download the substrate from.",
+                "type":         "string",
+                "enum":
+                [
+                    "github",
+                    "docker",
+                    "amazon",
+                    "microsoft",
+                    "google",
+                    "redhat",
+                    "jfrog"
+                ],
+                "default":      "github"
+            },
+            "needs_auth":
+            {
+                "$ref":         "#/$defs/auth_check"
+            }
+          }
+       },
+
+       "source": 
+       {
+          "description":   "The code or image that serves as the source for the package.}",
+          "type":               "object",
+          "properties":
+          {
+            "kind":
+            {
+                "description":  "The kind or type of the source.",
+                "type":         "string",
+                "enum":
+                [
+                    "image",
+                    "code",
+                    "tarball"
+                ],
+                "default":      "code"
+            },
+
+            "registry":
+            {
+                "description":  "The registry to download the source from.",
+                "type":         "string",
+                "enum":
+                [
+                    "github",
+                    "docker",
+                    "amazon",
+                    "microsoft",
+                    "google",
+                    "redhat",
+                    "jfrog"
+                ],
+                "default":      "github"
+            },
+
+            "name":
+            {
+                "description":  "The name of the source.",
+                "type":         "string",
+                "minLength":    3
+            },
+
+            "version":
+            {
+                "description":  "The version of the source.",
+                "type":         "object",
+                "properties":         
+                {
+                    "kind": 
+                    {
+                        "type": "string",
+                        "enum":
+                        [
+                            "tag",
+                            "branch"
+                        ]
+                    },
+                    "value": 
+                    {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "required": ["kind", "value"]         
+                }
+            },
+            
+            "needs_auth":
+            {
+                "$ref":         "#/$defs/auth_check"
+            }
+          }
+       },
+
+       "actions":
+       {
+        "description":  "The list of actions to be performed on the source prior to packaging.",
+        "type":          "array",
+        "items": 
+        {
+            "type":     "string"
+        }
+
+       }
+    
+    },
+     
+    "required": ["package", "substrate", "source"]
+ }
