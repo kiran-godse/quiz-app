@@ -27,31 +27,26 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v3
 
-      - name: Custom JSON Validation Action
+      - name: Validate JSON
         id: validation
-        uses: Nodejs-Rainfall/index.js @main
-        with:
-          json-file: ./recipe/cmake/recipe.json
-          schema-file: ./.schema/recipe.json
-
-      - name: Get Validation Result
-        id: validation_result
         run: |
-          echo "Validation Result: ${{ steps.validation.outputs.validation-result }}"
+          npm install ajv
+          json_file=./recipe/cmake/recipe.json
+          schema_file=./.schema/recipe.json
 
-      - name: Set Validation Status
-        run: |
-          if [[ "${{ steps.validation_result.outputs.validation-result }}" == "valid" ]]; then
-            echo "The JSON file is valid. Proceed with further steps."
-          else
+          npx ajv validate -s $schema_file -d $json_file
+          ajv_exit_code=$?
+          if [[ $ajv_exit_code -ne 0 ]]; then
             echo "The JSON file is invalid. Exiting the workflow."
             exit 1
+          else
+            echo "The JSON file is valid. Proceed with further steps."
           fi
 
       - name: Extract JSON Content
         id: extract_content
         run: |
-          json_content=$(echo '${{ steps.validation.outputs.json }}' | jq -c .)
+          json_content=$(cat ./recipe/cmake/recipe.json)
           echo "JSON Content: $json_content"
 
       - name: Extract Substrate Info
