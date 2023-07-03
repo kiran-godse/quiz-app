@@ -1,61 +1,73 @@
 name: Planner
-on: 
+
+on:
   workflow_dispatch:
     inputs:
       force_rebuild:
-        description:  'Force Rebuild'
-        required:     false
-        default:      false
-        type:         boolean
-
-  push:   
+        description: 'Force Rebuild'
+        required: false
+        default: false
+        type: boolean
+  push:
     branches: [ "master" ]
     paths:
       - '**/cmake-**.yml'
       - '**/cmake/**.json'
-
   schedule:
-    - cron:  '0 0 * * 0' # “At 00:00 on every Sunday”
+    - cron: '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
-
   params:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-    
+
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v3
-        
-      - name: Custom JSON reader Action
-        id: inputs
-        uses: kiran-godse/Nodejs-Rainfall@main
+
+      - name: Custom JSON Validation Action
+        id: validation
+        uses: Swapnil-Devops/recipe-validator-js@main
         with:
           json-file: ./recipe/cmake/recipe.json
           schema-file: ./.schema/recipe.json
-        
-      - name: outputs
-        id: set_output
-        run: |
-               json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .) 
-               substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-               substrate_name=$(echo "$json_content" | jq .substrate.name)
-               substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-               substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)  
-               echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
-               echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
-               echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
-               echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
-               
-      - name: Test outputs
-        id:   test
-        run: |
-  
-               echo "${{ steps.set_output.outputs.substrate_tag }}"
-               echo "${{ steps.set_output.outputs.substrate_name }}"
-               echo "${{ steps.set_output.outputs.substrate_registry }}"
-               echo "${{ steps.set_output.outputs.substrate_auth }}"
 
-                 
+      - name: Get Validation Result
+        id: validation_result
+        run: |
+          echo "Validation Result: ${{ steps.validation.outputs.validation-result }}"
+
+      - name: Set Validation Status
+        if: ${{ steps.validation_result.outputs.validation-result == 'valid' }}
+        run: |
+          echo "The JSON file is valid. Proceed with further steps."
+        else:
+          echo "The JSON file is invalid. Exiting the workflow."
+          exit 1
+
+      - name: Extract JSON Content
+        id: extract_content
+        run: |
+          json_content=$(echo '${{ steps.validation.outputs.json }}' | jq -c .)
+          echo "JSON Content: $json_content"
+
+      - name: Extract Substrate Info
+        id: extract_substrate_info
+        run: |
+          substrate_tag=$(echo "$json_content" | jq .substrate.tag)
+          substrate_name=$(echo "$json_content" | jq .substrate.name)
+          substrate_registry=$(echo "$json_content" | jq .substrate.registry)
+          substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
+          echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
+          echo "substrate_name=$substrate_name" >> $GITHUB_ENV
+          echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
+          echo "substrate_auth=$substrate_auth" >> $GITHUB_ENV
+
+      - name: Test Outputs
+        run: |
+          echo "Substrate Tag: ${{ env.substrate_tag }}"
+          echo "Substrate Name: ${{ env.substrate_name }}"
+          echo "Substrate Registry: ${{ env.substrate_registry }}"
+          echo "Substrate Auth: ${{ env.substrate_auth }}"
