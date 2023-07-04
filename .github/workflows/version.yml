@@ -17,52 +17,44 @@ on:
     - cron: '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
-  planner-job:
+  params:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
-    steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v3
+  steps:
+    - name: Checkout Codebase
+      uses: actions/checkout@v3
 
-      - name: Custom JSON reader Action
-        id: inputs
-        uses: kiran-godse/Nodejs-Rainfall@main
-        with:
-          json-file: ./recipe/cmake/recipe.json
-          schema-file: ./.schema/recipe.json
+    - name: Validate JSON
+      id: validation
+      uses: ./  # Uses the custom JSON validation action
+      with:
+        json-file: ./recipe/cmake/recipe.json
+        schema-file: ./.schema/recipe.json
 
-      - name: Validate JSON
-        id: validation
-        run: |
-          npm install ajv
+    - name: Extract JSON Content
+      id: extract_content
+      run: |
+        json_content=$(cat ./recipe/cmake/recipe.json)
+        echo "JSON Content: $json_content"
 
-          npx ajv validate -s ${{ steps.inputs.outputs.schema-file }} -d ${{ steps.inputs.outputs.json-file }}
-          ajv_exit_code=$?
-          if [[ $ajv_exit_code -ne 0 ]]; then
-            echo "The JSON file is invalid. Exiting the workflow."
-            exit 1
-          else
-            echo "The JSON file is valid. Proceed with further steps."
-          fi
+    - name: Extract Substrate Info
+      id: extract_substrate_info
+      run: |
+        substrate_tag=$(echo "$json_content" | jq .substrate.tag)
+        substrate_name=$(echo "$json_content" | jq .substrate.name)
+        substrate_registry=$(echo "$json_content" | jq .substrate.registry)
+        substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
+        echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
+        echo "substrate_name=$substrate_name" >> $GITHUB_ENV
+        echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
+        echo "substrate_auth=$substrate_auth" >> $GITHUB_ENV
 
-      - name: Extract JSON Content
-        id: extract_content
-        run: |
-          json_content=$(cat ${{ steps.inputs.outputs.json-file }})
-          echo "JSON Content: $json_content"
-
-      - name: Extract Substrate Info
-        id: extract_substrate_info
-        run: |
-          substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-          substrate_name=$(echo "$json_content" | jq .substrate.name)
-          substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-          substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
-          echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
-          echo "substrate_name=$substrate_name" >> $GITHUB_ENV
-          echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
-          echo "substrate_auth=$substrate_auth" >> $GITHUB_ENV
-
-      - name: Execute index.js
-        run: |
-          node index.js
+    - name: Test Outputs
+      run: |
+        echo "Substrate Tag: ${{ env.substrate_tag }}"
+        echo "Substrate Name: ${{ env.substrate_name }}"
+        echo "Substrate Registry: ${{ env.substrate_registry }}"
+        echo "Substrate Auth: ${{ env.substrate_auth }}"
