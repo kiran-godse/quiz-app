@@ -23,15 +23,22 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v3
 
+      - name: Fetch Action Files
+        uses: actions/checkout@v3
+        with:
+          repository: owner/repo
+          path: .github/actions/planner-action
+
+      - name: Install Dependencies
+        run: npm install
+
       - name: Validate JSON
         id: validation
         run: |
           json_file_path="./recipe/cmake/recipe.json"
           schema_file_path=".schema/recipe.json"
 
-          npm install ajv
-
-          node -e "const Ajv = require('ajv'); const recipe = require('${json_file_path}'); const schema = require('${schema_file_path}'); const ajv = new Ajv(); const validate = ajv.compile(schema); const valid = validate(recipe); if (!valid) throw new Error(JSON.stringify(validate.errors));"
+          node ./.github/actions/planner-action/index.js --json-file "$json_file_path" --schema-file "$schema_file_path"
 
       - name: Extract JSON Content
         id: extract_content
