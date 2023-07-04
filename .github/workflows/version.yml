@@ -23,24 +23,33 @@ jobs:
       run:
         shell: bash
     steps:
-    - name: Checkout Codebase
-      uses: actions/checkout@v3
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
 
-    - name: Validate JSON
-      id: validation
-      uses: kiran-godse/Nodejs-Rainfall@main
-      with:
-       json-file: recipe/cmake/recipe.json
-       schema-file: .schema/recipe.json
+      - name: Validate JSON
+        id: validation
+        run: |
+          json_file_path="./recipe/cmake/recipe.json"
+          schema_file_path=".schema/recipe.json"
 
-    - name: Extract JSON Content
-      id: extract_content
-      run: |
-        json_content=$(cat ./recipe/cmake/recipe.json)
-        echo "JSON Content:$json_content"
-    - name: Test Outputs
-      run: |
-              echo "Substrate Tag: ${{ env.substrate_tag }}"
-              echo "Substrate Name: ${{ env.substrate_name }}"
-              echo "Substrate Registry: ${{ env.substrate_registry }}"
-              echo "Substrate Auth: ${{ env.substrate_auth }}"
+          npm install ajv
+
+          node -e "const Ajv = require('ajv'); const recipe = require('${json_file_path}'); const schema = require('${schema_file_path}'); const ajv = new Ajv(); const validate = ajv.compile(schema); const valid = validate(recipe); if (!valid) throw new Error(JSON.stringify(validate.errors));"
+
+      - name: Extract JSON Content
+        id: extract_content
+        run: |
+          json_content=$(cat ./recipe/cmake/recipe.json)
+          echo "JSON Content: $json_content"
+
+      - name: Test Outputs
+        run: |
+          substrate_tag=$(echo "${{ steps.validation.outputs.recipe-properties }}" | jq -r '.substrate.tag')
+          substrate_name=$(echo "${{ steps.validation.outputs.recipe-properties }}" | jq -r '.substrate.name')
+          substrate_registry=$(echo "${{ steps.validation.outputs.recipe-properties }}" | jq -r '.substrate.registry')
+          substrate_auth=$(echo "${{ steps.validation.outputs.recipe-properties }}" | jq -r '.substrate.needs_auth')
+
+          echo "Substrate Tag: $substrate_tag"
+          echo "Substrate Name: $substrate_name"
+          echo "Substrate Registry: $substrate_registry"
+          echo "Substrate Auth: $substrate_auth"
