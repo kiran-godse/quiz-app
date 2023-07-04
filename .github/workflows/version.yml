@@ -22,38 +22,25 @@ jobs:
     defaults:
       run:
         shell: bash
-        steps:
-        - name: Checkout Codebase
-          uses: actions/checkout@v3
+    steps:
+    - name: Checkout Codebase
+      uses: actions/checkout@v3
 
-        - name: Validate JSON
-          id: validation
-          uses: kiran-godse/Nodejs-Rainfall@main
-          with:
-          json-file: ./recipe/cmake/recipe.json
-          schema-file: ./.schema/recipe.json
+    - name: Validate JSON
+      id: validation
+      uses: kiran-godse/Nodejs-Rainfall@main
+      with:
+       json-file: ./recipe/cmake/recipe.json
+       schema-file: ./.schema/recipe.json
 
-        - name: Extract JSON Content
-          id: extract_content
-          run: |
-           json_content=$(cat ./recipe/cmake/recipe.json)
-           echo "JSON Content: $json_content"
-
-        - name: Extract Substrate Info
-          id: extract_substrate_info
-          run: |
-           substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-           substrate_name=$(echo "$json_content" | jq .substrate.name)
-           substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-           substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
-           echo "substrate_tag=$substrate_tag" >> $GITHUB_ENV
-           echo "substrate_name=$substrate_name" >> $GITHUB_ENV
-           echo "substrate_registry=$substrate_registry" >> $GITHUB_ENV
-           echo "substrate_auth=$substrate_auth" >> $GITHUB_ENV
-
-       - name: Test Outputs
-         run: |
-         echo "Substrate Tag: ${{ env.substrate_tag }}"
-         echo "Substrate Name: ${{ env.substrate_name }}"
-         echo "Substrate Registry: ${{ env.substrate_registry }}"
-         echo "Substrate Auth: ${{ env.substrate_auth }}"
+    - name: Extract JSON Content
+      id: extract_content
+      run: |
+        json_content=$(cat ./recipe/cmake/recipe.json)
+        echo "JSON Content:$json_content"
+    - name: Test Outputs
+      run: |
+              echo "Substrate Tag: ${{ env.substrate_tag }}"
+              echo "Substrate Name: ${{ env.substrate_name }}"
+              echo "Substrate Registry: ${{ env.substrate_registry }}"
+              echo "Substrate Auth: ${{ env.substrate_auth }}"
