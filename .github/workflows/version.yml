@@ -17,11 +17,8 @@ on:
     - cron: '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
-  params:
+  planner-job:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v3
