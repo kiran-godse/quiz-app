@@ -30,8 +30,8 @@ jobs:
       id: validation
       uses: kiran-godse/Nodejs-Rainfall@main
       with:
-       json-file: ./recipe/cmake/recipe.json
-       schema-file: ./.schema/recipe.json
+       json-file: recipe/cmake/recipe.json
+       schema-file: .schema/recipe.json
 
     - name: Extract JSON Content
       id: extract_content
