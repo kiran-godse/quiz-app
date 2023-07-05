@@ -2,7 +2,7 @@
   "package": {
     "kind": "image",
     "name": "cmake",
-    "registry": "github",
+    "registry": "github"
    
   },
   "substrate": {
