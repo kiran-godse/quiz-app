@@ -2,8 +2,8 @@
   "package": {
     "kind": "image",
     "name": "cmake",
-    "registry": "github"
-   
+    "registry": "github",
+    "platforms": ["arm64", "amd64"]
   },
   "substrate": {
     "registry": "github",
