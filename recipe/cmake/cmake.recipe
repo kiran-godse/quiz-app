@@ -5,7 +5,7 @@
     "registry": "github",
     "platforms": [
       "arm64",
-      "amd64"
+     
     ]
   },
   "substrate": {
