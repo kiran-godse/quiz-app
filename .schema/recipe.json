@@ -90,4 +90,25 @@
           "type": "string",
           "minLength": 3
         },
-        "version
+        "version": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": ["tag", "branch"]
+            },
+            "value": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "required": ["kind", "value"]
+        },
+        "needs_auth": {
+          "$ref": "#/$defs/auth_check"
+        }
+      }
+    }
+  },
+  "required": ["package", "substrate", "source"]
+}
