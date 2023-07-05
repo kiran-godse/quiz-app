@@ -4,8 +4,7 @@
     "name": "cmake",
     "registry": "github",
     "platforms": [
-      "arm64",
-     
+      "arm64" 
     ]
   },
   "substrate": {
