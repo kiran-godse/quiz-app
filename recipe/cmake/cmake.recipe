@@ -3,9 +3,7 @@
     "kind": "image",
     "name": "cmake",
     "registry": "github",
-    "platforms": [
-      "arm64" 
-    ]
+   
   },
   "substrate": {
     "registry": "github",
