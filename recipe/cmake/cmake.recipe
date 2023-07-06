@@ -23,10 +23,10 @@
   },
   "actions": [
     "cd CMake",
-    "./bootstrap --parallel=${N_CORES}",
-    "make -j ${N_CORES}",
     "make install",
     "cd ..",
-    "rm -rf CMake"
+    "rm CMake"
   ]
+  }
+
 }
