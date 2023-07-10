@@ -48,7 +48,13 @@ jobs:
                echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
                echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
                echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
-               
+#       - name: Find devcontainer base image version
+#         run: |
+#           devcontainer_file="path/to/your/devcontainer.json"  # Update with the actual path to your devcontainer.json file
+#           base_image=$(jq -r '.build.args.BASE_IMAGE' "$devcontainer_file")
+#           base_image_version=$(docker pull "$base_image" --quiet | awk -F':' '{print $2}')
+#           echo "Base Image: $base_image"
+#           echo "Version: $base_image_version"         
       - name: Test outputs
         id:   test
         run: |
@@ -57,3 +63,4 @@ jobs:
                echo "${{ steps.set_output.outputs.substrate_name }}"
                echo "${{ steps.set_output.outputs.substrate_registry }}"
                echo "${{ steps.set_output.outputs.substrate_auth }}"
+   
