@@ -5,7 +5,7 @@ on:
       image-name:
         description: 'Docker image name'
         required: false
-        default: 'mydockerrepo/nginx :latest'
+        default: 'nginx:latest'
 
 jobs:
   execute-actions:
@@ -20,7 +20,11 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Execute Actions from First Repository
-        uses: kiran-godse/ImageTrial@main
-        with:
-          image-name: ${{ github.event.inputs.image-name }}
+      - name: Pull Docker Image
+        run: |
+          docker pull ${{ github.event.inputs['image-name'] }}
+
+      - name: Run Docker Container
+        run: |
+          npm install
+          node index.js ${{ github.event.inputs['image-name'] }}
