@@ -31,7 +31,7 @@ jobs:
         
       - name: Custom JSON reader Action
         id: inputs
-        uses: kiran-godse/Nodejs-Rainfall@main
+        uses: kiran-godse/ImageTrial@main
         with:
           json-file: ./recipe/cmake/cmake.recipe
           schema-file: ./.schema/recipe.json
