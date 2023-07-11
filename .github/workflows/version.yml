@@ -1,4 +1,4 @@
-name: Docker Container Workflow
+name: Execute Actions
 on:
   workflow_dispatch:
     inputs:
@@ -8,7 +8,7 @@ on:
         default: 'mydockerrepo/myimage:latest'
 
 jobs:
-  docker-container:
+  execute-actions:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Run Docker Container
-        run: |
-          npm install
-          node index.js ${{ github.event.inputs.image-name }}
+      - name: Execute Actions from First Repository
+        uses: kiran-godse/ImageTrial@main
+        with:
+          image-name: ${{ github.event.inputs.image-name }}
