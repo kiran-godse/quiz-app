@@ -5,7 +5,7 @@ on:
       image-name:
         description: 'Docker image name'
         required: false
-        default: 'mydockerrepo/myimage:latest'
+        default: 'mydockerrepo/nginx :latest'
 
 jobs:
   execute-actions:
