@@ -31,7 +31,7 @@ jobs:
         
       - name: Validation of Schema and recipe file using ajv.
         id: inputs
-        uses: kiran-godse/Nodejs-Rainfall@main
+        uses: kiran-godse/ImageTrail@main
         with:
           json-file: ./recipe/cmake/cmake.recipe
           schema-file: ./.schema/recipe.json
