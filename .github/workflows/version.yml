@@ -1,59 +1,21 @@
-name: Planner
-on: 
-  workflow_dispatch:
-    inputs:
-      force_rebuild:
-        description:  'Force Rebuild'
-        required:     false
-        default:      false
-        type:         boolean
-
-  push:   
-    branches: [ "master" ]
-    paths:
-      - '**/cmake-**.yml'
-      - '**/cmake/**.json'
-
-  schedule:
-    - cron:  '0 0 * * 0' # “At 00:00 on every Sunday”
+name: Get Substrate Version Workflow
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-
-  params:
+  get_version:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v3
-        
-      - name: Validation of Schema and recipe file using ajv.
-        id: inputs
-        uses: kiran-godse/ImageTrail@main
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Substrate Version
+        id: substrate_version
+        uses: kiran-godse/ImageTrial@v1
         with:
-          json-file: ./recipe/cmake/cmake.recipe
-          schema-file: ./.schema/recipe.json
-        
-      - name: outputs
-        id: set_output
-        run: |
-               json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .) 
-               substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-               substrate_name=$(echo "$json_content" | jq .substrate.name)
-               substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-               substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)  
-               echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
-               echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
-               echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
-               echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
-               
-      - name: Test outputs
-        id:   test
-        run: |
-  
-               echo "${{ steps.set_output.outputs.substrate_tag }}"
-               echo "${{ steps.set_output.outputs.substrate_name }}"
-               echo "${{ steps.set_output.outputs.substrate_registry }}"
-               echo "${{ steps.set_output.outputs.substrate_auth }}"
+          substrate_json: '{"registry": "github","name": "rainfall-one/crucible","tag": "latest","needs_auth": true}'
+      
+      - name: Print Substrate Version
+        run: echo "The version of Substrate is ${{ steps.substrate_version.outputs.version }}"
