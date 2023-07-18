@@ -33,7 +33,7 @@ jobs:
         id: inputs
         uses: kiran-godse/Nodejs-Rainfall@main
         with:
-          json-file: ./recipe/cmake/cmake.json
+          json-file: recipe/cmake/cmake.recipe
           schema-file: ./.schema/recipe.json
         
       - name: outputs
