@@ -36,24 +36,4 @@ jobs:
           json-file: recipe/cmake/cmake.recipe
           schema-file: ./.schema/recipe.json
         
-      - name: outputs
-        id: set_output
-        run: |
-               json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .) 
-               substrate_tag=$(echo "$json_content" | jq .substrate.tag)
-               substrate_name=$(echo "$json_content" | jq .substrate.name)
-               substrate_registry=$(echo "$json_content" | jq .substrate.registry)
-               substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)  
-               echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
-               echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
-               echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
-               echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
-               
-      - name: Test outputs
-        id:   test
-        run: |
-  
-               echo "${{ steps.set_output.outputs.substrate_tag }}"
-               echo "${{ steps.set_output.outputs.substrate_name }}"
-               echo "${{ steps.set_output.outputs.substrate_registry }}"
-               echo "${{ steps.set_output.outputs.substrate_auth }}"
+    
