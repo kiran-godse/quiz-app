@@ -15,6 +15,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Test Node.js Rainfall
-        uses: ./ # Reference the Nodejs-Rainfall action from the same repository
+        uses: ./kiran-godse/Nodejs-Rainfall@main
 
       # Add more steps for the rest of the workflow in Quiz App
