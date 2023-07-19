@@ -1,9 +1,13 @@
 name: Test Node.js Rainfall
 
-on:
-  push:
-    branches:
-      - main
+on: 
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description:  'Force Rebuild'
+        required:     false
+        default:      false
+        type:         boolean
 
 jobs:
   test:
