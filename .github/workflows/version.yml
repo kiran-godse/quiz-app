@@ -29,9 +29,9 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v3
         
-      - name: Custom JSON reader Action
+      - name: Validation of JSON schema
         id: inputs
-        uses: kiran-godse/Nodejs-Rainfall@main
+        uses: kiran-godse/ValidateRecipe@main
         with:
           json-file: recipe/cmake/cmake.recipe
           schema-file: ./.schema/recipe.json
