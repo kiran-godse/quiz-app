@@ -20,7 +20,7 @@ jobs:
 
       - name: Test Node.js Rainfall
         id: inputs
-        uses: kiran-godse/Nodejs-Rainfall@main
+        uses: kiran-godse/ValidateRecipe@main
         with:
           json-file: ./recipe/cmake/recipe.json
 
