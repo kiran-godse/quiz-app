@@ -16,9 +16,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Test Node.js Rainfall
+        id: inputs
         uses: ./kiran-godse/Nodejs-Rainfall@main
+        with:
+          json-file: ./recipe/cmake/recipe.json
 
       # Add more steps for the rest of the workflow in Quiz App
