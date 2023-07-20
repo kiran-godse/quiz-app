@@ -17,5 +17,5 @@ jobs:
         uses: kiran-godse/ValidateRecipe@main
         with:
           recipe-file: ./recipe/cmake/recipe.json
-          schema-file: './.schema/recipe.json
+          schema-file: ./.schema/recipe.json
 
