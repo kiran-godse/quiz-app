@@ -1,39 +1,21 @@
-name: Planner
-on: 
-  workflow_dispatch:
-    inputs:
-      force_rebuild:
-        description:  'Force Rebuild'
-        required:     false
-        default:      false
-        type:         boolean
+name: Recipe Validation
 
-  push:   
-    branches: [ "master" ]
-    paths:
-      - '**/cmake-**.yml'
-      - '**/cmake/**.json'
-
-  schedule:
-    - cron:  '0 0 * * 0' # “At 00:00 on every Sunday”
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-
-  params:
+  validate-recipe:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    
+
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v3
-        
-      - name: Validation of JSON schema
-        id: inputs
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate and Read Recipe
         uses: kiran-godse/ValidateRecipe@main
         with:
-          json-file: recipe/cmake/cmake.recipe
-          schema-file: ./.schema/recipe.json
-        
-    
+          recipe-file: ./recipe/cmake/recipe.json
+          schema-file: './.schema/recipe.json
+
