@@ -1,12 +1,30 @@
 name: Recipe Validation
-on:
-  push:
-    branches:
-      - main
+on: 
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description:  'Force Rebuild'
+        required:     false
+        default:      false
+        type:         boolean
+
+  push:   
+    branches: [ "main" ]
+    paths:
+      - '**/cmake-**.yml'
+      - '**/cmake/**.json'
+
+#   schedule:
+#     - cron:  '0 0 * * 0' # “At 00:00 on every Sunday”
 
 jobs:
-  validate-recipe:
+
+  params:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    
 
     steps:
       - name: Checkout code
