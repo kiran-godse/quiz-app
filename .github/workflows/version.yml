@@ -34,6 +34,6 @@ jobs:
         uses: kiran-godse/ValidateRecipe@main
         with:
           json-file: ./recipe/cmake/recipe.json
-          schema-file: ./path/to/your/schema.json
+          schema-file: .schema/recipe.json
 
   
