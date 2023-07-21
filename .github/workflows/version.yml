@@ -14,7 +14,6 @@ on:
       - '**/cmake-**.yml'
       - '**/cmake/**.json'
 
-
 jobs:
 
   params:
@@ -22,8 +21,7 @@ jobs:
     defaults:
       run:
         shell: bash
-    
-
+   
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -48,47 +46,22 @@ jobs:
         id: set_output
         run: |
                json_content=$(echo '${{ steps.inputs.outputs.json }}' | jq -c .)
-               package_kind=$(echo "$json_content" | jq .package.kind)
-               package_name=$(echo "$json_content" | jq .package.name)
-               package_registry=$(echo "$json_content" | jq .package.registry)
-               package_platforms=$(echo "$json_content" | jq .package.platforms[1])
                substrate_tag=$(echo "$json_content" | jq .substrate.tag)
                substrate_name=$(echo "$json_content" | jq .substrate.name)
                substrate_registry=$(echo "$json_content" | jq .substrate.registry)
                substrate_auth=$(echo "$json_content" | jq .substrate.needs_auth)
-               source_kind=$(echo "$json_content" | jq .source.kind)
-               source_name=$(echo "$json_content" | jq .source.name)
-               source_registry=$(echo "$json_content" | jq .source.registry)
-               source_version=$(echo "$json_content" | jq .source.version.value)
-
-
-               echo "package_kind=$package_kind" >> $GITHUB_OUTPUT
-               echo "package_name=$package_name" >> $GITHUB_OUTPUT
-               echo "package_registry=$package_registry" >> $GITHUB_OUTPUT
-               echo "package_platforms=$package_platforms" >> $GITHUB_OUTPUT
+              
                echo "substrate_tag=$substrate_tag" >> $GITHUB_OUTPUT
                echo "substrate_name=$substrate_name" >> $GITHUB_OUTPUT
                echo "substrate_registry=$substrate_registry" >> $GITHUB_OUTPUT
                echo "substrate_auth=$substrate_auth" >> $GITHUB_OUTPUT
-               echo "source_kind=$source_kind" >> $GITHUB_OUTPUT
-               echo "source_name=$source_name" >> $GITHUB_OUTPUT
-               echo "source_registry=$source_registry" >> $GITHUB_OUTPUT
-               echo "source_version=$source_version" >> $GITHUB_OUTPUT
-               
-               
+              
       - name: Test outputs
         id:   test
         run: |
-                  echo "${{ steps.set_output.outputs.package_kind }}"
-                  echo "${{ steps.set_output.outputs.package_name }}"
-                  echo "${{ steps.set_output.outputs.package_registry }}"
-                  echo "${{ steps.set_output.outputs.package_platforms }}"
                   echo "${{ steps.set_output.outputs.substrate_tag }}"
                   echo "${{ steps.set_output.outputs.substrate_name }}"
                   echo "${{ steps.set_output.outputs.substrate_registry }}"
                   echo "${{ steps.set_output.outputs.substrate_auth }}"
-                  echo "${{ steps.set_output.outputs.source_kind }}"
-                  echo "${{ steps.set_output.outputs.source_name }}"
-                  echo "${{ steps.set_output.outputs.source_registry }}"
-                  echo "${{ steps.set_output.outputs.source_version }}"   
+                  
     
