@@ -1,46 +1,76 @@
-name: Recipe Validation
-on: 
-  workflow_dispatch:
-    inputs:
-      force_rebuild:
-        description:  'Force Rebuild'
-        required:     false
-        default:      false
-        type:         boolean
+const core = require('@actions/core');
+const fs = require('fs');
+const Ajv = require('ajv');
+const ajvKeywords = require('ajv-keywords');
 
-  push:   
-    branches: [ "main" ]
-    paths:
-      - '**/cmake-**.yml'
-      - '**/cmake/**.json'
+const ajv = new Ajv.default({ allErrors: true, allowUnionTypes: true });
+ajvKeywords(ajv, ['regexp']);
 
+async function main(_core) {
+  try {
+    // Read the JSON file path from the input
+    const jsonFilePath = _core.getInput('json-file');
+    const schemaFilePath = _core.getInput('schema-file');
 
-jobs:
+    // Read the JSON file content
+    const jsonContent = fs.readFileSync(jsonFilePath, 'utf8');
 
-  params:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    
+    // Read the schema file content
+    const schemaContent = fs.readFileSync(schemaFilePath, 'utf8');
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      
-      - name: Install npm dependencies
-        run: npm install
+    // Parse JSON content into an object
+    const jsonData = JSON.parse(jsonContent);
 
+    // Parse JSON schema content into an object
+    let jsonSchema = JSON.parse(schemaContent);
+    if (jsonSchema && typeof jsonSchema === 'object') {
+      delete jsonSchema['$schema']; // Remove $schema property from the schema
+    } else {
+      throw new Error('Invalid JSON schema. The schema must be an object.');
+    }
 
-      - name: Validate and Read Recipe
-        uses: kiran-godse/ValidateRecipe@main
-        with:
-          json-file: ./recipe/cmake/recipe.json
-          schema-file: ./.schema/recipe.json
+    // Validate the JSON data against the schema
+    const isValid = validateRecipe(jsonData, jsonSchema);
 
-  
+    // Set the JSON content as an output
+    _core.setOutput('json', jsonContent);
+
+    // Set the validation status as an output
+    _core.setOutput('isValid', isValid.toString()); // Convert boolean to string for output
+
+    // If the recipe is valid, read and process the data
+    if (isValid) {
+      readRecipe(jsonData);
+    }
+  } catch (error) {
+    _core.setFailed(`Action failed with error: ${error.message}`);
+  }
+}
+
+function validateRecipe(data, schema) {
+  try {
+    const validate = ajv.compile(schema);
+    const isValid = validate(data);
+
+    if (isValid) {
+      console.log('Recipe is valid!');
+      return true;
+    } else {
+      console.log('Recipe is invalid:', validate.errors);
+      return false;
+    }
+  } catch (error) {
+    console.log('Error occurred during validation:', error.message);
+    return false;
+  }
+}
+
+function readRecipe(data) {
+  const isValid = validateRecipe(data);
+  if (isValid) {
+    console.log('Substrate data:', data.substrate);
+  }
+}
+
+main(core);
+module.exports = { main };
