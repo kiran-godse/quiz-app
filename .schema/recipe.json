@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Flow Definition",
   "description": "A DSL for configuring Github Workflows to create Rainfall artifacts.",
   "type": ["object", "boolean"],
