@@ -38,7 +38,13 @@ jobs:
 
 
       - name: Validate and Read Recipe
+        id: inputs
         uses: kiran-godse/ValidateRecipe@main
         with:
           json-file: ./recipe/cmake/recipe.json
           schema-file: ./.schema/recipe.json
+      
+      - name: outputs
+        id: set_output
+        run: echo '${{ steps.inputs.outputs.json }}'   
+    
