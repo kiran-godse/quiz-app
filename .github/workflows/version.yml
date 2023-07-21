@@ -40,7 +40,7 @@ jobs:
       - name: Validate and Read Recipe
         uses: kiran-godse/ValidateRecipe@main
         with:
-          json-file: .recipe/cmake/recipe.json
+          json-file: ./recipe/cmake/recipe.json
           schema-file: ./.schema/recipe.json
 
   
