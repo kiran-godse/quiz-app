@@ -1,0 +1,43 @@
+name: Trigger Workflow on Discussion
+
+on:
+  discussion:
+    types:
+      - created
+
+jobs:
+  triage:
+    if: >-
+      github.event.discussion.category.name == 'General'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: workflow steps
+        id: prompt
+        run: |
+          echo "body=$(echo '${{ toJson(github.event) }}' | jq '.discussion.body')" >> $GITHUB_OUTPUT
+          echo "title=$(echo '${{ toJson(github.event) }}' | jq '.discussion.title')" >> $GITHUB_OUTPUT
+
+      - name: chatgpt
+        id: chatgpt
+        uses: kiran-godse/chatdocument@main
+        with:
+          api_key: ${{ secrets.API_KEY }}
+          prompt: ${{ steps.prompt.outputs.body }}
+
+      - name: Create a new GitHub Discussion
+        id: create-discussion
+        uses: abirismyname/create-discussion@v1.1.0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          title: ${{ steps.prompt.outputs.title }}
+          body: ${{ steps.chatgpt.outputs.body }}
+          repository-id: R_kgDOJu3TlQ
+          category-id: DIC_kwDOJu3Tlc4CYRdF
+      - name: Print discussion url and id
+        run: |
+          echo discussion-id: ${{steps.create-discussion.outputs.discussion-id}} 
+          echo discussion-url: ${{steps.create-discussion.outputs.discussion-url}}
