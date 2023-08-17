@@ -22,7 +22,7 @@ jobs:
 
       - name: chatgpt
         id: chatgpt
-        uses: kiran-godse/chatdocument@main
+        uses: swapnil-devops/chatdocument@main
         with:
           api_key: ${{ secrets.API_KEY }}
           prompt: ${{ steps.prompt.outputs.body }}
